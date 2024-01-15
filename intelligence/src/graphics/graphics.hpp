@@ -19,7 +19,7 @@ namespace core::graphics {
 
 	std::thread init_graphics(
 			const std::atomic<bool>& running,
-			GlobalContext& global,
+			topics::GlobalContext& global,
 			std::function<void(Event)>&&
 		);
 }

@@ -8,15 +8,15 @@
 #include <functional>
 #include <future>
 
-void loop_worker(core::GlobalContext&, nodes::lidar::Context&);
+void loop_worker(core::topics::GlobalContext&, core::nodes::lidar::Context&);
 
-core::ApplicationNode nodes::lidar::create_node() {
-	return core::ApplicationNode{
-		.node = core::create_node<lidar::Context>(setup, end),
+core::nodes::ApplicationNode core::nodes::lidar::create_node() {
+	return core::nodes::ApplicationNode{
+		.node = core::nodes::create_node<lidar::Context>(setup, end),
 	};
 }
 
-void nodes::lidar::setup(core::GlobalContext& global, lidar::Context &ctx) {
+void core::nodes::lidar::setup(core::topics::GlobalContext& global, lidar::Context &ctx) {
 	global.topics.test.get_observable()
 		.observe_on(rxcpp::observe_on_new_thread())
 		.subscribe([](int value) {
@@ -30,11 +30,11 @@ void nodes::lidar::setup(core::GlobalContext& global, lidar::Context &ctx) {
 	);
 }
 
-void nodes::lidar::end(::core::GlobalContext &global, lidar::Context &ctx) {
+void core::nodes::lidar::end(core::topics::GlobalContext &global, lidar::Context &ctx) {
 	ctx.loop_future.wait();
 }
 
-void loop_worker(core::GlobalContext& global, nodes::lidar::Context& ctx) {
+void loop_worker(core::topics::GlobalContext& global, core::nodes::lidar::Context& ctx) {
 	auto obs = rxcpp::observable<>::interval(std::chrono::milliseconds(500))
 		.take_until(global.stop_signal)
 		.subscribe([&](long iter) {

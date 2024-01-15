@@ -5,8 +5,8 @@
 #include "easylogging/easylogging++.h"
 
 #include "enviroment.hpp"
+#include "nodes/node.hpp"
 #include "rxcpp/subjects/rx-subject.hpp"
-#include "topics.hpp"
 #include "graphics.hpp"
 
 #include <SFML/Graphics.hpp>
@@ -18,11 +18,11 @@ constexpr size_t HEIGHT = 600;
 
 void main_graphics_loop(
 		const std::atomic<bool>& running, 
-		core::GlobalContext& global, 
+		core::nodes::GlobalContext& global, 
 		std::function<void(core::graphics::Event)>&
 	);
 
-std::thread core::graphics::init_graphics(const std::atomic<bool>& running, GlobalContext& global, std::function<void(Event)>&& on_event) {
+std::thread core::graphics::init_graphics(const std::atomic<bool>& running, nodes::GlobalContext& global, std::function<void(Event)>&& on_event) {
     auto handler = std::thread(main_graphics_loop, std::cref(running), std::ref(global), std::ref(on_event));
     return handler;
 }
@@ -34,7 +34,7 @@ void init(core::graphics::Context& ctx) {
 std::vector<sf::Keyboard::Key> get_pressed_keys();
 void main_graphics_loop(
 		const std::atomic<bool>& running,
-		core::GlobalContext& global,
+		core::nodes::GlobalContext& global,
 		std::function<void(core::graphics::Event)>& on_event
 ) {
 	rxcpp::subjects::subject<sf::Keyboard::Key> input;

@@ -6,7 +6,9 @@
 #include <functional>
 #include <memory>
 #include <optional>
-namespace core {
+namespace core::nodes {
+	using GlobalContext = topics::GlobalContext;
+
 	class Node {
 		public:
 			virtual void setup(GlobalContext& global) = 0;

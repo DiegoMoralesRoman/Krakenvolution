@@ -4,6 +4,6 @@
 #include "nodes/nodes.hpp"
 #include "topics.hpp"
 
-namespace nodes::lidar {
+namespace core::nodes::lidar {
 	INIT_NODE(lidar, lidar::Context);
 }

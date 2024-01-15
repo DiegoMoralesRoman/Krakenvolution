@@ -1,9 +1,8 @@
 #pragma once
 
 #include <future>
-#include <thread>
 
-namespace nodes::lidar {
+namespace core::nodes::lidar {
 	struct Context {
 		std::future<void> loop_future;
 	};

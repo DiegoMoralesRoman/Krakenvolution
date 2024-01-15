@@ -3,12 +3,11 @@
 #include <atomic>
 #include <rxcpp/rx.hpp>
 // Messages
-#include "easylogging/easylogging++.h"
 #include "messages/detection.hpp"
 #include "rxcpp/rx-observable.hpp"
 #include "rxcpp/subjects/rx-subject.hpp"
 
-namespace core {
+namespace core::topics {
 	/*=============
 	 System topics
 	=============*/
@@ -36,7 +35,7 @@ namespace core {
 	//
 // Define custom nodes
 #define INIT_NODE(name, context_class) \
-	void setup(::core::GlobalContext& global, context_class& ctx); \
-	void end(::core::GlobalContext& global, context_class& ctx); \
-	::core::ApplicationNode create_node();
+	void setup(::core::topics::GlobalContext& global, context_class& ctx); \
+	void end(::core::topics::GlobalContext& global, context_class& ctx); \
+	::core::nodes::ApplicationNode create_node();
 }

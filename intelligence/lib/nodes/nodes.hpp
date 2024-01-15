@@ -4,7 +4,7 @@
 #include <memory>
 #include <vector>
 
-namespace nodes {
-	using NodePtr = std::unique_ptr<core::Node>;
-	std::vector<core::ApplicationNode> create_all_nodes(); 
+namespace core::nodes {
+	using NodePtr = std::unique_ptr<core::nodes::Node>;
+	std::vector<core::nodes::ApplicationNode> create_all_nodes(); 
 }

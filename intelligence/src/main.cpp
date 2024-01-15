@@ -40,8 +40,8 @@ int main(int argc, char* argv[]) {
 	// Main thread control variable
 	std::atomic<bool> running = true;
 
-	core::GlobalContext global_context (&running);
-	auto nodes = nodes::create_all_nodes();
+	core::topics::GlobalContext global_context (&running);
+	auto nodes = core::nodes::create_all_nodes();
 
 	// ===================
 	// Add parsing options

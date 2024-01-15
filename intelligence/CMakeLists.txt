@@ -24,6 +24,9 @@ endif()
 project(krakenvolution)
 set(CMAKE_CXX_STANDARD 23)
 
+# For RXCPP reasons I have to disable this warnings
+add_compile_options(-Wno-deprecated-declarations)
+
 include_directories(${PROJECT_SOURCE_DIR}/lib)
 include_directories(${PROJECT_SOURCE_DIR}/include)
 

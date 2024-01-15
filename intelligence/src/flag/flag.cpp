@@ -1,7 +1,5 @@
 #include "flag.hpp"
 #include <algorithm>
-#include <array>
-#include <bits/ranges_algo.h>
 #include <format>
 #include <unistd.h>
 #include <sys/ioctl.h>
@@ -14,6 +12,9 @@ namespace rg = std::ranges;
 
 #include "../prog_info.hpp"
 
+/**
+ * @brief Centered lines that show after the main flag
+ */
 const std::vector<std::string> INFO_LINES {
 	"-----------------------",
 	"Created by",
@@ -22,6 +23,9 @@ const std::vector<std::string> INFO_LINES {
 	std::format("{}v", run::info::VERSION)
 };
 
+/**
+ * @brief Main banner image
+ */
 const auto FLAG = R"(
 █▄▀ █▀█ ▄▀▄ █▄▀ █▀▀ █▄ █ █ █ █▀█ █   █ █ ▀█▀ ▀█▀ █▀█ █▄ █ 
 █ █ █▀▄ █▀█ █ █ ██▄ █ ▀█ ▀▄▀ █▄█ █▄▄ █▄█  █  ▄█▄ █▄█ █ ▀█ 
@@ -29,6 +33,13 @@ const auto FLAG = R"(
 
 const auto max_length = 56;
 
+/**
+ * @brief Centers a text to a max width
+ *
+ * @param text text to center
+ * @param width assumed maximum width of the text. The text will be centered around half this width
+ * @return padded text
+ */
 std::string center_text(const std::string& text, int width) {
     if (text.length() >= width) {
         return text;  // Text is too wide to center in the given width
@@ -50,8 +61,6 @@ int get_terminal_width() {
 
 std::string run::flag::flag() {
 	std::string f { FLAG };
-
-	const auto terminal_width = get_terminal_width();
 
 	const auto transformed_info = INFO_LINES
 		| rv::transform([](const auto& line) { return std::string{line}; })

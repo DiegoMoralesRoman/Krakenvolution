@@ -5,6 +5,7 @@
 #include "easylogging/easylogging++.h"
 
 #include "enviroment.hpp"
+#include "rxcpp/subjects/rx-subject.hpp"
 #include "topics.hpp"
 #include "graphics.hpp"
 
@@ -30,17 +31,21 @@ void init(core::graphics::Context& ctx) {
 	ctx.win.setFramerateLimit(60);
 };
 
+std::vector<sf::Keyboard::Key> get_pressed_keys();
 void main_graphics_loop(
 		const std::atomic<bool>& running,
 		core::GlobalContext& global,
 		std::function<void(core::graphics::Event)>& on_event
 ) {
+	rxcpp::subjects::subject<sf::Keyboard::Key> input;
+	const auto& input_sub = input.get_subscriber();
 	core::graphics::Context ctx {
-		.win = sf::RenderWindow(sf::VideoMode(WIDTH, HEIGHT), "Krakenvolution")
+		.win = sf::RenderWindow(sf::VideoMode(WIDTH, HEIGHT), "Krakenvolution"),
+		.input = input.get_observable()
 	};
 	init(ctx);
 
-	core::graphics::impl::Enviroment env;
+	core::graphics::impl::Enviroment env(ctx);
 
 	while (running) {
 		// ===========
@@ -54,6 +59,10 @@ void main_graphics_loop(
 			}
 		}
 
+		for (auto& key : get_pressed_keys()) {
+			input_sub.on_next(key);
+		}
+
 		ctx.win.clear();
 
 		// Drawing enviroment
@@ -63,4 +72,16 @@ void main_graphics_loop(
 		ctx.win.display();
 	}
 	LOG(INFO) << "Exiting main graphics execution loop";
+}
+
+std::vector<sf::Keyboard::Key> get_pressed_keys() {
+    std::vector<sf::Keyboard::Key> pressedKeys;
+
+    for (int key = sf::Keyboard::A; key != sf::Keyboard::KeyCount; ++key) {
+        if (sf::Keyboard::isKeyPressed(static_cast<sf::Keyboard::Key>(key))) {
+            pressedKeys.push_back(static_cast<sf::Keyboard::Key>(key));
+        }
+    }
+
+    return pressedKeys;
 }

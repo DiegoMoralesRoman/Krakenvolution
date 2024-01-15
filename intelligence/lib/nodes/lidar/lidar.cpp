@@ -23,7 +23,7 @@ void nodes::lidar::setup(core::GlobalContext& global, lidar::Context &ctx) {
 			LOG(DEBUG) << "Value: " << value;
 		});
 
-	ctx.loop_handler = std::async(
+	ctx.loop_future = std::async(
 		loop_worker,
 		std::ref(global),
 		std::ref(ctx)
@@ -31,7 +31,7 @@ void nodes::lidar::setup(core::GlobalContext& global, lidar::Context &ctx) {
 }
 
 void nodes::lidar::end(::core::GlobalContext &global, lidar::Context &ctx) {
-	ctx.loop_handler.wait();
+	ctx.loop_future.wait();
 }
 
 void loop_worker(core::GlobalContext& global, nodes::lidar::Context& ctx) {

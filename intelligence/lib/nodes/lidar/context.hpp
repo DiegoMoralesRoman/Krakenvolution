@@ -5,6 +5,6 @@
 
 namespace nodes::lidar {
 	struct Context {
-		std::future<void> loop_handler;
+		std::future<void> loop_future;
 	};
 }

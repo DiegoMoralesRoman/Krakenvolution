@@ -14,9 +14,17 @@
 #include "flag/flag.hpp"
 #include "graphics/graphics.hpp"
 
+/**
+ * TODO: have to create extensions folder (I'll need it for networking, serial, etc.)
+ * TODO: add serialization and deserialization library to this
+ * 	- Has to have something like JSON and BIN output (maybe protobuf if impl for Arduino)
+ */
+
+
 INITIALIZE_EASYLOGGINGPP
 
-std::function<void(int signum)> sigint_func;
+// This has to be this way because the signal function only takes a void(*)() function pointer
+std::function<void(int signum)> sigint_func; // <-- Real callback that will be called upon SIGINT
 void sigint_handler(int signum) {
 	sigint_func(signum);
 }
@@ -42,24 +50,23 @@ int main(int argc, char* argv[]) {
 	auto options = run::parser::add_options(app);
 	CLI11_PARSE(app, argc, argv);
 
-	// =================
-	// Interpret options
-	// =================
+	// ============
+	// Initial flag
+	// ============
 	if (!options->quiet) {
 		auto flag = run::flag::flag();
 		std::cout << flag << std::endl << std::endl;
 	}
 
-
-
 	// ================
 	// Running graphics
 	// ================
-	std::thread gui_handle;
+	std::thread gui_thread;
 	if (options->graphics) {
 #ifdef HAS_SFML
 		LOG(INFO) << "Launching GUI";
 
+		// Window event callback function
 		auto on_gui_event = [&running](core::graphics::Event ev) {
 			switch (ev) {
 				case core::graphics::Event::CLOSE:
@@ -70,7 +77,7 @@ int main(int argc, char* argv[]) {
 			}
 		};
 
-		gui_handle = core::graphics::init_graphics(running, global_context, on_gui_event);
+		gui_thread = core::graphics::init_graphics(running, global_context, on_gui_event);
 #else
 		LOG(WARNING) << "Application built without SFML support. Remove the --grahpics flag";
 #endif
@@ -98,8 +105,11 @@ int main(int argc, char* argv[]) {
 
 	LOG(INFO) << "Setup complete!";
 
-	running.wait(true);
+	running.wait(true); // Wait here until the program stops running
 
+	// =========================================
+	// Tearing down of the application resources
+	// =========================================
 	LOG(INFO) << "Stopping nodes...";
 	for (auto& node : nodes) {
 		node.node->end(global_context);
@@ -109,7 +119,7 @@ int main(int argc, char* argv[]) {
 	LOG(INFO) << "Stopping threads...";
 #ifdef HAS_SFML
 	if (options->graphics) {
-		gui_handle.join();
+		gui_thread.join();
 		LOG(INFO) << "GUI stopped";
 	}
 #endif

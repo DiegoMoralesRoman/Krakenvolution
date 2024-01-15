@@ -14,6 +14,7 @@ namespace core::graphics {
 
 	struct Context {
 		sf::RenderWindow win;
+		rxcpp::observable<sf::Keyboard::Key> input;
 	};
 
 	std::thread init_graphics(

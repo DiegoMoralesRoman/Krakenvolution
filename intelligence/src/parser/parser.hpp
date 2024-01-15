@@ -6,6 +6,7 @@
 namespace run::parser {
 	struct Options {
 		bool graphics;
+		bool quiet;
 	};
 
 	std::unique_ptr<Options> add_options(CLI::App& app); 

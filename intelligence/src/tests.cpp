@@ -1,16 +1,10 @@
-#include "util/generator.hpp"
-#include <coroutine>
+#include "rxcpp/operators/rx-observe_on.hpp"
+#include "rxcpp/rx-observable.hpp"
+#include "rxcpp/rx-subscriber.hpp"
+#include <chrono>
 #include <iostream>
-
-Generator<unsigned int> iota(unsigned int n = 0)
-{
-    while (true)
-        co_yield n++;
-}
+#include <thread>
 
 int main() {
-	std::cout << "Hello, world!" << std::endl;
-	for (auto& val : iota()) {
-		std::cout << "Value: " << val << std::endl;
-	}
+	auto obs = rxcpp::observable<>::interval(std::chrono::milliseconds(500));
 }

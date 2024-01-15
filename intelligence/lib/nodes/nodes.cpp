@@ -2,9 +2,10 @@
 
 // Nodes
 #include "nodes/lidar/lidar.hpp"
+#include "nodes/node.hpp"
 
-std::vector<nodes::NodePtr> nodes::create_all_nodes() {
-	std::vector<NodePtr> nodes;
+std::vector<core::ApplicationNode> nodes::create_all_nodes() {
+	std::vector<core::ApplicationNode> nodes;
 
 	// Add all nodes
 	nodes.push_back(lidar::create_node());

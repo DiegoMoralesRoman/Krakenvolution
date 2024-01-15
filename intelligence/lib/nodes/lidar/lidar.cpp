@@ -1,22 +1,45 @@
 #include "lidar.hpp"
+#include "easylogging/easylogging++.h"
 #include "nodes/node.hpp"
-#include "nodes/nodes.hpp"
-#include <thread>
+#include "rxcpp/operators/rx-observe_on.hpp"
+#include "rxcpp/rx-observable.hpp"
+#include "topics.hpp"
+#include <chrono>
+#include <functional>
+#include <future>
 
-void reader_worker();
+void loop_worker(core::GlobalContext&, nodes::lidar::Context&);
 
-nodes::NodePtr nodes::lidar::create_node() {
-	return core::create_node<lidar::Context>(setup, end);
+core::ApplicationNode nodes::lidar::create_node() {
+	return core::ApplicationNode{
+		.node = core::create_node<lidar::Context>(setup, end),
+	};
 }
 
 void nodes::lidar::setup(core::GlobalContext& global, lidar::Context &ctx) {
-	ctx.reader_thread = std::thread(reader_worker);
+	global.topics.test.get_observable()
+		.observe_on(rxcpp::observe_on_new_thread())
+		.subscribe([](int value) {
+			LOG(DEBUG) << "Value: " << value;
+		});
+
+	ctx.loop_handler = std::async(
+		loop_worker,
+		std::ref(global),
+		std::ref(ctx)
+	);
 }
 
 void nodes::lidar::end(::core::GlobalContext &global, lidar::Context &ctx) {
-	ctx.reader_thread.join();
+	ctx.loop_handler.wait();
 }
 
-void reader_worker() {
+void loop_worker(core::GlobalContext& global, nodes::lidar::Context& ctx) {
+	auto obs = rxcpp::observable<>::interval(std::chrono::milliseconds(500))
+		.take_until(global.stop_signal)
+		.subscribe([&](long iter) {
+				// Iteration loop
+				global.topics.test.get_subscriber().on_next(iter);
+			});
 }
 

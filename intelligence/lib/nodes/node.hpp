@@ -2,6 +2,7 @@
 
 #include "topics.hpp"
 
+#include <cstddef>
 #include <functional>
 #include <memory>
 #include <optional>
@@ -9,23 +10,23 @@ namespace core {
 	class Node {
 		public:
 			virtual void setup(GlobalContext& global) = 0;
-			virtual void loop(GlobalContext& global) = 0;
 			virtual void end(GlobalContext& global) = 0;
 			virtual ~Node() {};
+	};
+
+	struct ApplicationNode {
+		std::unique_ptr<Node> node;
+		std::optional<size_t> tick_rate_millis = std::nullopt;
 	};
 
 	template<typename Ctx>
 	class NodeTemplate : public Node {
 		public:
 			using SetupFunc = std::function<void(GlobalContext&, Ctx&)>;
-			using LoopFunc = std::function<void(GlobalContext&, Ctx&)>;
 			using EndFunc = std::function<void(GlobalContext&, Ctx&)>;
 
 			NodeTemplate(const SetupFunc&& setup, const EndFunc&& end)
-				: _setup(setup) {}
-
-			NodeTemplate (const SetupFunc&& setup, const EndFunc&& end, const LoopFunc&& loop)
-				: _setup(setup), _loop(loop) {}
+				: _setup(setup), _end(end) {}
 
 			virtual ~NodeTemplate() = default;
 
@@ -37,17 +38,10 @@ namespace core {
 				this->_end(global, this->ctx);
 			}
 
-			virtual void loop(GlobalContext& global) override {
-				if (this->_loop.has_value()) {
-					this->_loop.value()(global, this->ctx);
-				}
-			}
-
 		private:
 			Ctx ctx;
 			SetupFunc _setup;
 			EndFunc _end;
-			std::optional<LoopFunc> _loop = std::nullopt;
 	};
 
 	template<typename Context, typename... Args>

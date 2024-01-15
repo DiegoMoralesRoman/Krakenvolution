@@ -1,31 +1,25 @@
 #include "enviroment.hpp"
+#include "easylogging/easylogging++.h"
 #include "graphics.hpp"
 
 core::graphics::impl::Enviroment::Enviroment(Context& ctx) {
-	ctx.input.subscribe([this](sf::Keyboard::Key key) {
-		switch (key) {
-			case sf::Keyboard::Key::W:
-				this->circle.move(0.0, -1.0);
+	ctx.mouse_wheel_input.subscribe([this](const auto& ev) {
+		const auto& [dir, value] = ev;
+		switch (dir) {
+			case sf::Mouse::VerticalWheel:
+				this->circle.move(0.0, value);
 				break;
-			case sf::Keyboard::Key::A:
-				this->circle.move(-1.0, 0.0);
-				break;
-			case sf::Keyboard::Key::S:
-				this->circle.move(0.0, 1.0);
-				break;
-			case sf::Keyboard::Key::D:
-				this->circle.move(1.0, 0.0);
-				break;
-			default:
+			case sf::Mouse::HorizontalWheel:
+				this->circle.move(value, 0.0);
 				break;
 		}
 	});
 
-	this->circle.setPosition(ctx.win.getSize().x / 2, ctx.win.getSize().y / 2);
+	this->circle.setPosition(ctx.win.getSize().x / 2.0, ctx.win.getSize().y / 2.0);
+	this->circle.setFillColor(sf::Color::Green);
 }
 
 void core::graphics::impl::Enviroment::update(Context& ctx) {
-	this->circle.setFillColor(sf::Color::Green);
 }
 
 void core::graphics::impl::Enviroment::draw(Context& ctx) const {

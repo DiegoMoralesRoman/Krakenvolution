@@ -27,12 +27,16 @@ set(CMAKE_CXX_STANDARD 23)
 # For RXCPP reasons I have to disable this warnings
 add_compile_options(-Wno-deprecated-declarations)
 
+add_subdirectory(messages)
+include_directories(${PROTO_OUTPUT_DIR})
+
 include_directories(${PROJECT_SOURCE_DIR}/lib)
 include_directories(${PROJECT_SOURCE_DIR}/include)
 
 add_subdirectory(include)
 add_subdirectory(src)
 add_subdirectory(lib)
+
 
 add_custom_target(run
 	COMMAND ${CMAKE_COMMAND} --build . --target ${PROJECT_NAME}
@@ -43,7 +47,3 @@ add_custom_target(run
 
 enable_testing()
 add_subdirectory(test)
-
-message("${Green}\n============================${Reset}")
-message("${Green}= CMAKE BUILD SUCCESSFULY! =${Reset}")
-message("${Green}============================\n${Reset}")

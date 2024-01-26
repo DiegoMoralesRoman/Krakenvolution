@@ -14,7 +14,7 @@ file(GLOB_RECURSE TEST_FILES
 	${CMAKE_CURRENT_SOURCE_DIR}/test_*.cpp
 )
 
-if (NOT ${TEST_FILES})
+if (NOT "${TEST_FILES}")
 	message("\n${Green}Found tests:${Reset}")
 	foreach(TEST_FILE ${TEST_FILES})
 		get_filename_component(TEST_NAME ${TEST_FILE} NAME_WE) # Get the file name without extension

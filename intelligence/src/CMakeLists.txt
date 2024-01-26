@@ -17,6 +17,9 @@ set(MAIN_LIBS
 	cliparser
 	flag
 
+	# messages
+	messages
+
 	# lib folder
 	nodes
 )
@@ -39,6 +42,9 @@ target_link_libraries(${PROJECT_NAME}
 )
 
 add_executable(tests tests.cpp)
-target_link_libraries(
-	${PROJECT_NAME}
+target_link_libraries(tests
+	${MAIN_LIBS}
 )
+
+add_dependencies(tests messages)
+add_dependencies(${PROJECT_NAME} messages)

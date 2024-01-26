@@ -2,17 +2,18 @@
 
 #include <atomic>
 #include <rxcpp/rx.hpp>
+
 // Messages
-#include "messages/detection.hpp"
 #include "rxcpp/rx-observable.hpp"
 #include "rxcpp/subjects/rx-subject.hpp"
+// Protobuf messages
 
 namespace core::topics {
 	/*=============
 	 System topics
 	=============*/
 	struct Topics {
-		rxcpp::subjects::subject<messages::Detection> detections;
+		// rxcpp::subjects::subject<messages::Detection> detections;
 		rxcpp::subjects::subject<int> test;
 	};
 

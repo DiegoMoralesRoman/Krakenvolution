@@ -22,8 +22,6 @@ foreach(MOD ${MODULE_DIRS})
 	# Get files
 	file(GLOB_RECURSE MOD_SOURCES 
 		"${CMAKE_CURRENT_SOURCE_DIR}/${MOD}/*.cpp"
-		# "${CMAKE_CURRENT_SOURCE_DIR}/${MOD}/*.hpp"
-		# "${CMAKE_CURRENT_SOURCE_DIR}/${MOD}/*.tcc"
 	)
 
 	if (MOD_SOURCES)
@@ -34,6 +32,9 @@ foreach(MOD ${MODULE_DIRS})
 		endforeach()
 		# Add the library
 		add_library(${MOD_NAME} STATIC ${MOD_SOURCES})
+		target_link_libraries(${MOD_NAME} messages)
+		add_dependencies(${MOD_NAME} messages)
+
 		list(APPEND TMP_ALL_LIBS "${MOD_NAME}")
 	else()
 		message("	${Blue}No sources were found")

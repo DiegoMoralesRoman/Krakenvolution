@@ -1,10 +1,17 @@
-#include "rxcpp/operators/rx-observe_on.hpp"
-#include "rxcpp/rx-observable.hpp"
-#include "rxcpp/rx-subscriber.hpp"
-#include <chrono>
 #include <iostream>
-#include <thread>
+
+#include "messages/test.pb.h"
 
 int main() {
-	auto obs = rxcpp::observable<>::interval(std::chrono::milliseconds(500));
+	std::cout << "Hello world" << std::endl;
+	Person p;
+	p.set_name("Kekosaurio");
+	p.set_id(123);
+
+	auto serialized = p.SerializeAsString();
+
+	Person deser;
+	deser.ParseFromString(serialized);
+
+	std::cout << "Name: " << deser.name() << ", id: " << deser.id() << std::endl;
 }

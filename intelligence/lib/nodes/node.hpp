@@ -18,7 +18,6 @@ namespace core::nodes {
 
 	struct ApplicationNode {
 		std::unique_ptr<Node> node;
-		std::optional<size_t> tick_rate_millis = std::nullopt;
 	};
 
 	template<typename Ctx>

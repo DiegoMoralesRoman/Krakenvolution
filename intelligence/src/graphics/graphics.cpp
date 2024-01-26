@@ -1,13 +1,18 @@
+#include <SFML/Graphics/Rect.hpp>
+#include <SFML/Graphics/View.hpp>
 #include <atomic>
 #include <functional>
 #include <thread>
 
 #include "easylogging/easylogging++.h"
 
-#include "enviroment.hpp"
+#include "context.hpp"
 #include "nodes/node.hpp"
 #include "rxcpp/subjects/rx-subject.hpp"
 #include "graphics.hpp"
+
+#include "components/enviroment.hpp"
+#include "components/grid.hpp"
 
 #include <SFML/Graphics.hpp>
 #include <SFML/Graphics/CircleShape.hpp>
@@ -20,16 +25,24 @@ constexpr size_t HEIGHT = 600;
 void main_graphics_loop(
 		const std::atomic<bool>& running, 
 		core::nodes::GlobalContext& global, 
-		std::function<void(core::graphics::Event)>&
+		std::function<void(run::graphics::Event)>&
 	);
 
-std::thread core::graphics::init_graphics(const std::atomic<bool>& running, nodes::GlobalContext& global, std::function<void(Event)>&& on_event) {
+std::thread run::graphics::init_graphics(const std::atomic<bool>& running, core::nodes::GlobalContext& global, std::function<void(Event)>&& on_event) {
     auto handler = std::thread(main_graphics_loop, std::cref(running), std::ref(global), std::ref(on_event));
     return handler;
 }
 
-void init(core::graphics::Context& ctx) {
+void init(run::graphics::Context& ctx) {
 	ctx.win.setFramerateLimit(60);
+
+	const float proportions = (static_cast<float>(ctx.win.getSize().x) / static_cast<float>(ctx.win.getSize().y));
+	ctx.view.setSize(
+		proportions,
+		1.0f
+	);
+
+	ctx.view.setCenter(0.0, 0.0);
 };
 
 std::vector<sf::Keyboard::Key> get_pressed_keys();
@@ -39,8 +52,9 @@ void handle_mouse_wheel_event(const sf::Event& event, const rxcpp::subscriber<st
 void main_graphics_loop(
 		const std::atomic<bool>& running,
 		core::nodes::GlobalContext& global,
-		std::function<void(core::graphics::Event)>& on_event
+		std::function<void(run::graphics::Event)>& on_event
 ) {
+	// Channels
 	rxcpp::subjects::subject<sf::Keyboard::Key> key_input;
 	const auto& key_input_sub = key_input.get_subscriber();
 	rxcpp::subjects::subject<sf::Mouse::Button> mouse_btn_input;
@@ -48,15 +62,17 @@ void main_graphics_loop(
 	rxcpp::subjects::subject<std::tuple<sf::Mouse::Wheel, double>> mouse_wheel_input;
 	const auto& mouse_wheel_input_sub = mouse_wheel_input.get_subscriber();
 
-	core::graphics::Context ctx {
+	// Create main context
+	run::graphics::Context ctx {
 		.win = sf::RenderWindow(sf::VideoMode(WIDTH, HEIGHT), "Krakenvolution"),
 		.key_input = key_input.get_observable(),
 		.mouse_btn_input = mouse_btn_input.get_observable(),
-		.mouse_wheel_input = mouse_wheel_input.get_observable()
+		.mouse_wheel_input = mouse_wheel_input.get_observable(),
+		.global = global
 	};
 	init(ctx);
 
-	core::graphics::impl::Enviroment env(ctx);
+	run::graphics::components::Enviroment env(ctx);
 
 	while (running) {
 		// ===========
@@ -67,7 +83,7 @@ void main_graphics_loop(
 			handle_mouse_wheel_event(ev, mouse_wheel_input_sub);
 			if (ev.type == sf::Event::Closed) {
 				LOG(INFO) << "Sending close event";
-				on_event(core::graphics::Event::CLOSE);
+				on_event(run::graphics::Event::CLOSE);
 			}
 		}
 
@@ -80,7 +96,9 @@ void main_graphics_loop(
 
 		// Drawing enviroment
 		env.update(ctx);
-		env.draw(ctx);
+		env.render(ctx);
+
+		ctx.win.setView(ctx.view);
 
 		ctx.win.display();
 	}

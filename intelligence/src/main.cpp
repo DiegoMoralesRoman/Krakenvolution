@@ -67,9 +67,9 @@ int main(int argc, char* argv[]) {
 		LOG(INFO) << "Launching GUI";
 
 		// Window event callback function
-		auto on_gui_event = [&running](core::graphics::Event ev) {
+		auto on_gui_event = [&running](run::graphics::Event ev) {
 			switch (ev) {
-				case core::graphics::Event::CLOSE:
+				case run::graphics::Event::CLOSE:
 				LOG(INFO) << "Closing GUI window";
 				running = false;
 				running.notify_all();
@@ -77,7 +77,7 @@ int main(int argc, char* argv[]) {
 			}
 		};
 
-		gui_thread = core::graphics::init_graphics(running, global_context, on_gui_event);
+		gui_thread = run::graphics::init_graphics(running, global_context, on_gui_event);
 #else
 		LOG(WARNING) << "Application built without SFML support. Remove the --grahpics flag";
 #endif

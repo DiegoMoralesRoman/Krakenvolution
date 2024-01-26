@@ -12,7 +12,6 @@
 #include "graphics.hpp"
 
 #include "components/enviroment.hpp"
-#include "components/grid.hpp"
 
 #include <SFML/Graphics.hpp>
 #include <SFML/Graphics/CircleShape.hpp>

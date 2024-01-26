@@ -30,11 +30,11 @@ namespace run::log {
 		conf.set(el::Level::Global, el::ConfigurationType::LogFlushThreshold, "100");
 
 		// Set colored logs
-		conf.set(el::Level::Info, el::ConfigurationType::Format, "\x1B[32m%datetime %level %msg\x1B[0m"); // Green for Info
-		conf.set(el::Level::Warning, el::ConfigurationType::Format, "\x1B[33m%datetime %level %msg\x1B[0m"); // Yellow for Warning
-		conf.set(el::Level::Error, el::ConfigurationType::Format, "\x1B[31m%datetime %level %msg\x1B[0m"); // Red for Error
-		conf.set(el::Level::Debug, el::ConfigurationType::Format, "\x1B[34m%datetime %level %msg\x1B[0m"); // Blue for Debug
-		conf.set(el::Level::Fatal, el::ConfigurationType::Format, "\x1B[35m%datetime %level %msg\x1B[0m"); // Magenta for Fatal
+		conf.set(el::Level::Info, el::ConfigurationType::Format, "%datetime \x1B[1m%level\x1B[0m %msg"); // Only bold for Info 
+		conf.set(el::Level::Warning, el::ConfigurationType::Format, "%datetime \x1B[1m\x1B[33m%level\x1B[0m %msg"); // Yellow for Warning
+		conf.set(el::Level::Error, el::ConfigurationType::Format, "%datetime \x1B[1m\x1B[31m%level\x1B[0m %msg"); // Red for Error
+		conf.set(el::Level::Debug, el::ConfigurationType::Format, "%datetime \x1B[1m\x1B[34m%level\x1B[0m %msg"); // Blue for Debug
+		conf.set(el::Level::Fatal, el::ConfigurationType::Format, "%datetime \x1B[1m\x1B[35m%level\x1B[0m %msg"); // Magenta for Fatal
 
 		return conf;
 	}

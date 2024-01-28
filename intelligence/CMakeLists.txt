@@ -58,3 +58,14 @@ add_dependencies(valg ${PROJECT_NAME})
 
 enable_testing()
 add_subdirectory(test)
+
+set(CMAKE_INSTALL_MANIFEST "install_manifest.txt")
+
+add_custom_target(uninstall
+    COMMAND "${CMAKE_COMMAND}" -P "${CMAKE_CURRENT_SOURCE_DIR}/cmake_uninstall.cmake"
+)
+
+install(TARGETS ${PROJECT_NAME}
+        RUNTIME DESTINATION bin
+        LIBRARY DESTINATION lib
+        ARCHIVE DESTINATION lib/static)

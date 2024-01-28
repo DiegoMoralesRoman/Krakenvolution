@@ -2,6 +2,7 @@
 
 #include "nodes/node.hpp"
 #include "nodes/nodes.hpp"
+#include "config/config.hpp"
 #include "topics.hpp"
 
 struct Context {

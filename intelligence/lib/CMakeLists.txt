@@ -16,28 +16,36 @@ endforeach()
 # Build each module
 message("\n${Green}Found the following lib modules: ${Reset}")
 foreach(MOD ${MODULE_DIRS})
-	get_filename_component(MOD_NAME ${MOD} NAME)
-	message("- ${Yellow}${MOD_NAME}${Reset}")
+    get_filename_component(MOD_NAME ${MOD} NAME)
 
-	# Get files
-	file(GLOB_RECURSE MOD_SOURCES 
-		"${CMAKE_CURRENT_SOURCE_DIR}/${MOD}/*.cpp"
-	)
+    # Path to the module's CMakeLists.txt
+    set(MOD_CMAKE_LISTS "${CMAKE_CURRENT_SOURCE_DIR}/${MOD}/CMakeLists.txt")
 
-	if (MOD_SOURCES)
+	file(GLOB_RECURSE MOD_SOURCES "${CMAKE_CURRENT_SOURCE_DIR}/${MOD}/*.cpp")
+
+	if (EXISTS "${MOD_CMAKE_LISTS}")
+		message("- ${Yellow}${MOD_NAME}${Reset}${BoldYellow} (included cmake)${Reset}")
+	else()
+		message("- ${Yellow}${MOD_NAME}${Reset}")
+	endif()
+
+	if(MOD_SOURCES)
 		foreach(SOURCE ${MOD_SOURCES})
 			get_filename_component(REL_SOURCE ${SOURCE} NAME)
-			message("	- ${REL_SOURCE}")
+			message("    - ${REL_SOURCE}")
 			set_source_files_properties(${SOURCE} PROPERTIES LANGUAGE CXX)
 		endforeach()
+
 		# Add the library
 		add_library(${MOD_NAME} STATIC ${MOD_SOURCES})
-		target_link_libraries(${MOD_NAME} messages)
-		add_dependencies(${MOD_NAME} messages)
+
+		if(EXISTS "${MOD_CMAKE_LISTS}")
+			include("${MOD_CMAKE_LISTS}")
+		endif()
 
 		list(APPEND TMP_ALL_LIBS "${MOD_NAME}")
 	else()
-		message("	${Blue}No sources were found")
+		message("    ${Blue}No sources were found")
 	endif()
 endforeach()
 message("")

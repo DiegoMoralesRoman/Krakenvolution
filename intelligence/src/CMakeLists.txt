@@ -10,6 +10,7 @@ add_executable(${PROJECT_NAME} main.cpp ${MAIN_FILES})
 set(MAIN_LIBS
 	# Third party
 	easylogging
+	yaml
 
 	# src folder
 	cliparser

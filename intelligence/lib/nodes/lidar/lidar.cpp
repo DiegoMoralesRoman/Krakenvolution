@@ -16,7 +16,7 @@ core::nodes::ApplicationNode core::nodes::lidar::create_node() {
 	};
 }
 
-void core::nodes::lidar::setup(core::topics::GlobalContext& global, lidar::Context &ctx) {
+void core::nodes::lidar::setup(core::topics::GlobalContext& global, lidar::Context &ctx, const config::Config& cfg) {
 	global.topics.test.get_observable()
 		.observe_on(rxcpp::observe_on_new_thread())
 		.take_until(global.stop_signal)
@@ -31,7 +31,7 @@ void core::nodes::lidar::setup(core::topics::GlobalContext& global, lidar::Conte
 	);
 }
 
-void core::nodes::lidar::end(core::topics::GlobalContext &global, lidar::Context &ctx) {
+void core::nodes::lidar::end(core::topics::GlobalContext &global, lidar::Context &ctx, const config::Config& cfg) {
 	ctx.loop_future.wait();
 }
 

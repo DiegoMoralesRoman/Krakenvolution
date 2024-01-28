@@ -33,10 +33,9 @@ namespace core::topics {
 			}).detach(); // Detach the thread to run independently
 		}
 	};
-	//
 // Define custom nodes
 #define INIT_NODE(name, context_class) \
-	void setup(::core::topics::GlobalContext& global, context_class& ctx); \
-	void end(::core::topics::GlobalContext& global, context_class& ctx); \
+	void setup(::core::topics::GlobalContext& global, context_class& ctx, const ::core::config::Config& cfg); \
+	void end(::core::topics::GlobalContext& global, context_class& ctx, const ::core::config::Config& cfg); \
 	::core::nodes::ApplicationNode create_node();
 }

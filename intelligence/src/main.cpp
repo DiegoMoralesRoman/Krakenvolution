@@ -8,12 +8,7 @@
 #include "run/flag/flag.hpp"
 
 #include "run/run.hpp"
-
-/**
- * TODO: have to create extensions folder (I'll need it for networking, serial, etc.)
- * TODO: add serialization and deserialization library to this
- * 	- Has to have something like JSON and BIN output (maybe protobuf if impl for Arduino)
- */
+#include "yaml/Yaml.hpp"
 
 INITIALIZE_EASYLOGGINGPP
 
@@ -46,6 +41,8 @@ int main(int argc, char* argv[]) {
 		gui_thread = run::init_graphics_thread(running, global_context);
 	}
 
+	const core::config::Config config = Yaml::Node{};
+
 	// Configure SIGINT function
 	sigint_func = [&](int signum) {
 		LOG(INFO) << "Received closing signal from user <Ctrl-C>";
@@ -54,11 +51,11 @@ int main(int argc, char* argv[]) {
 	};
 	std::signal(SIGINT, sigint_handler);
 
-	run::init_nodes(nodes, global_context);
+	run::init_nodes(nodes, global_context, config);
 
 	running.wait(true); // Wait here until the program stops running
 
-	run::teardown_nodes(nodes, global_context);
+	run::teardown_nodes(nodes, global_context, config);
 
 	LOG(INFO) << "Stopping threads...";
 	if (options->graphics && gui_thread.has_value()) {

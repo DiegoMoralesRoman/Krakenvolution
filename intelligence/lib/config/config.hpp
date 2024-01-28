@@ -8,6 +8,7 @@
 
 namespace core::config {
 	using LoadResult = std::expected<Yaml::Node, LoadErr>;
+	using Config = Yaml::Node;
 
 	const LoadResult load_config(const std::string& path) noexcept;
 }

@@ -18,7 +18,7 @@ namespace rg = std::ranges;
 const std::vector<std::string> INFO_LINES {
 	"-----------------------",
 	"Created by",
-	"Laura Morales Román",
+	"        \x1B[1mLaura Morales Román\x1B[0m",
 	"-----------------------",
 	std::format("{}v", run::info::VERSION)
 };
@@ -27,11 +27,11 @@ const std::vector<std::string> INFO_LINES {
  * @brief Main banner image
  */
 const auto FLAG = R"(
-█▄▀ █▀█ ▄▀▄ █▄▀ █▀▀ █▄ █ █ █ █▀█ █   █ █ ▀█▀ ▀█▀ █▀█ █▄ █ 
-█ █ █▀▄ █▀█ █ █ ██▄ █ ▀█ ▀▄▀ █▄█ █▄▄ █▄█  █  ▄█▄ █▄█ █ ▀█ 
+  █▄▀ █▀█ ▄▀▄ █▄▀ █▀▀ █▄ █ █ █ █▀█ █   █ █ ▀█▀ ▀█▀ █▀█ █▄ █ 
+  █ █ █▀▄ █▀█ █ █ ██▄ █ ▀█ ▀▄▀ █▄█ █▄▄ █▄█  █  ▄█▄ █▄█ █ ▀█ 
 )";
 
-const auto max_length = 56;
+const auto max_length = 58;
 
 /**
  * @brief Centers a text to a max width
@@ -60,7 +60,8 @@ int get_terminal_width() {
 }
 
 std::string run::flag::flag() {
-	std::string f { FLAG };
+	std::string f { std::string{"\x1B[1m\x1B[34m"} + FLAG };
+	f.append("\x1B[0m");
 
 	const auto transformed_info = INFO_LINES
 		| rv::transform([](const auto& line) { return std::string{line}; })

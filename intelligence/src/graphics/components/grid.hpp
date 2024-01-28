@@ -10,6 +10,7 @@ namespace run::graphics::components {
 			void render(Context& ctx);
 
 		private:
-			sf::CircleShape circle;
+			sf::Shader grid_shader;
+			sf::RectangleShape backdrop;
 	};
 }

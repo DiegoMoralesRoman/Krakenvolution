@@ -1,6 +1,7 @@
 #include <atomic>
 #include <csignal>
 #include <functional>
+#include <google/protobuf/stubs/common.h>
 #include <iostream>
 #include <thread>
 
@@ -67,7 +68,7 @@ int main(int argc, char* argv[]) {
 		LOG(INFO) << "Launching GUI";
 
 		// Window event callback function
-		auto on_gui_event = [&running](run::graphics::Event ev) {
+		const auto on_gui_event = [&running](run::graphics::Event ev) {
 			switch (ev) {
 				case run::graphics::Event::CLOSE:
 				LOG(INFO) << "Closing GUI window";
@@ -124,6 +125,8 @@ int main(int argc, char* argv[]) {
 	}
 #endif
 
+	LOG(INFO) << "Freeing memory...";
+	google::protobuf::ShutdownProtobufLibrary();
 	LOG(INFO) << "Closing application ";
 	return 0;
 }

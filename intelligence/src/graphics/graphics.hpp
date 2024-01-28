@@ -15,6 +15,6 @@ namespace run::graphics {
 	std::thread init_graphics(
 			const std::atomic<bool>& running,
 			core::topics::GlobalContext& global,
-			std::function<void(Event)>&&
+			const std::function<void(Event)>&
 		);
 }

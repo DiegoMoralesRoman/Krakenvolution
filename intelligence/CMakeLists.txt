@@ -24,6 +24,8 @@ endif()
 project(krakenvolution)
 set(CMAKE_CXX_STANDARD 23)
 
+set(CMAKE_CXX_FLAGS_RELEASE "-O3 -DNDEBUG")
+
 # For RXCPP reasons I have to disable this warnings
 add_compile_options(-Wno-deprecated-declarations)
 
@@ -44,6 +46,15 @@ add_custom_target(run
 	WORKING_DIRECTORY ${CMAKE_PROJECT_DIR}
 	COMMENT "Builds and runs the entire application"
 )
+add_dependencies(run ${PROJECT_NAME})
+
+add_custom_target(valg
+	COMMAND ${CMAKE_COMMAND} --build . --target ${PROJECT_NAME}
+	COMMAND valgrind --leak-check=full ./src/${PROJECT_NAME}
+	WORKING_DIRECTORY ${CMAKE_PROJECT_DIR}
+	COMMENT "Builds and runs the entire application with valgrind"
+)
+add_dependencies(valg ${PROJECT_NAME})
 
 enable_testing()
 add_subdirectory(test)

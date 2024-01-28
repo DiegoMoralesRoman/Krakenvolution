@@ -19,6 +19,7 @@ core::nodes::ApplicationNode core::nodes::lidar::create_node() {
 void core::nodes::lidar::setup(core::topics::GlobalContext& global, lidar::Context &ctx) {
 	global.topics.test.get_observable()
 		.observe_on(rxcpp::observe_on_new_thread())
+		.take_until(global.stop_signal)
 		.subscribe([](int value) {
 			LOG(DEBUG) << "Value: " << value;
 		});

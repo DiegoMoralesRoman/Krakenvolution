@@ -24,11 +24,11 @@ constexpr size_t HEIGHT = 600;
 void main_graphics_loop(
 		const std::atomic<bool>& running, 
 		core::nodes::GlobalContext& global, 
-		std::function<void(run::graphics::Event)>&
+		const std::function<void(run::graphics::Event)>
 	);
 
-std::thread run::graphics::init_graphics(const std::atomic<bool>& running, core::nodes::GlobalContext& global, std::function<void(Event)>&& on_event) {
-    auto handler = std::thread(main_graphics_loop, std::cref(running), std::ref(global), std::ref(on_event));
+std::thread run::graphics::init_graphics(const std::atomic<bool>& running, core::nodes::GlobalContext& global, const std::function<void(Event)>& on_event) {
+    auto handler = std::thread(main_graphics_loop, std::cref(running), std::ref(global), on_event);
     return handler;
 }
 
@@ -51,7 +51,7 @@ void handle_mouse_wheel_event(const sf::Event& event, const rxcpp::subscriber<st
 void main_graphics_loop(
 		const std::atomic<bool>& running,
 		core::nodes::GlobalContext& global,
-		std::function<void(run::graphics::Event)>& on_event
+		const std::function<void(run::graphics::Event)> on_event
 ) {
 	// Channels
 	rxcpp::subjects::subject<sf::Keyboard::Key> key_input;
@@ -67,9 +67,12 @@ void main_graphics_loop(
 		.key_input = key_input.get_observable(),
 		.mouse_btn_input = mouse_btn_input.get_observable(),
 		.mouse_wheel_input = mouse_wheel_input.get_observable(),
-		.global = global
+		.global = global,
+		.send_event = on_event
 	};
 	init(ctx);
+
+	sf::Clock frame_clock;
 
 	run::graphics::components::Enviroment env(ctx);
 
@@ -100,6 +103,7 @@ void main_graphics_loop(
 		ctx.win.setView(ctx.view);
 
 		ctx.win.display();
+		ctx.dt = frame_clock.restart().asSeconds();
 	}
 	LOG(INFO) << "Exiting main graphics execution loop";
 }

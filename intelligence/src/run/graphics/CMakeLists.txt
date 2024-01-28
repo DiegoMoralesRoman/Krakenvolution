@@ -1,4 +1,4 @@
-message("${Green}Compiling graphics lib${Reset}")
+message("${Green}Adding sources for graphics lib${Reset}")
 
 file (GLOB_RECURSE SOURCES 
 	${CMAKE_CURRENT_SOURCE_DIR}/*.cpp

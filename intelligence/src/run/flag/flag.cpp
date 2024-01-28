@@ -10,7 +10,7 @@
 namespace rv = std::ranges::views;
 namespace rg = std::ranges;
 
-#include "../prog_info.hpp"
+#include "../../prog_info.hpp"
 
 /**
  * @brief Centered lines that show after the main flag

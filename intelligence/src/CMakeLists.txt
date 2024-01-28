@@ -2,13 +2,11 @@ set(MAIN_SOURCES
 	libpubsub
 )
 
-add_subdirectory(parser)
-add_subdirectory(flag)
-
 # Find SFML
 find_package(SFML 2.5 COMPONENTS graphics QUIET)
 
-add_executable(${PROJECT_NAME} main.cpp)
+add_subdirectory(run)
+add_executable(${PROJECT_NAME} main.cpp ${MAIN_FILES})
 set(MAIN_LIBS
 	# Third party
 	easylogging
@@ -32,7 +30,7 @@ if (SFML_FOUND)
 
 	message("${Green}Found SFML in system, building with HAS_SFML #define${Reset}")
 	target_compile_definitions(${PROJECT_NAME} PRIVATE HAS_SFML)
-	add_subdirectory(graphics)
+	add_subdirectory(run/graphics)
 else()
 	message("${Yellow}SFML was not found, compiling without graphicsl options${Reset}")
 endif()

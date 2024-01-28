@@ -11,7 +11,7 @@ std::unique_ptr<run::parser::Options> run::parser::add_options(CLI::App &app) {
 			"Doesn't display the initial header");
 
 	app.add_option("--config", options->config_path,
-			"Path where the YAML configuration path is located")
+			"Path where the YAML configuration path is located \x1B[1m\x1B[32m[OPTIONAL]\x1B[0m")
 	->check(CLI::ExistingFile);
 	
 	return options;

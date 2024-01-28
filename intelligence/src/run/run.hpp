@@ -15,8 +15,8 @@ namespace run {
 	std::unique_ptr<parser::Options> parse_cli(int argc, char* argv[]);
 
 	// Nodes
-	void init_nodes(std::vector<core::nodes::ApplicationNode>& nodes, core::topics::GlobalContext& global, const core::config::Config& cfg);
-	void teardown_nodes(std::vector<core::nodes::ApplicationNode>& nodes, core::topics::GlobalContext& global, const core::config::Config& cfg);
+	void init_nodes(std::vector<core::nodes::ApplicationNode>& nodes, core::topics::GlobalContext& global, core::config::Config& cfg);
+	void teardown_nodes(std::vector<core::nodes::ApplicationNode>& nodes, core::topics::GlobalContext& global, core::config::Config& cfg);
 
 	// Graphics
 	std::optional<std::thread> init_graphics_thread(std::atomic<bool>& running, core::topics::GlobalContext& global);

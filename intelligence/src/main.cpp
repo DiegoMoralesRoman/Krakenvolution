@@ -29,7 +29,9 @@ int main(int argc, char* argv[]) {
 	auto options = run::parse_cli(argc, argv);
 	if (options == nullptr) return 0;
 
-	// Interpreting command line options
+	// ///////////////////////////////// //
+	// Interpreting command line options //
+	// ///////////////////////////////// //
 	if (!options->quiet) {
 		auto flag = run::flag::flag();
 		std::cout << flag << std::endl << std::endl;
@@ -40,12 +42,15 @@ int main(int argc, char* argv[]) {
 		gui_thread = run::init_graphics_thread(running, global_context);
 	}
 
-	const core::config::Config config = options->config_path.has_value()
+	core::config::Config config = options->config_path.has_value()
 		? run::config_from_path(options->config_path.value())
 		: core::config::Config{};
 	if (not options->config_path.has_value()) { LOG(WARNING) << "No configuration specifided"; }
 
-	// Configure SIGINT function
+	// ////////////////////// //
+	// Initialize application //
+	// ////////////////////// //
+		// Configure SIGINT function
 	sigint_func = [&](int signum) {
 		LOG(INFO) << "Received closing signal from user <Ctrl-C>";
 		running = false;

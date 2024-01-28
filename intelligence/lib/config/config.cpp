@@ -1,29 +1,20 @@
 #include "config.hpp"
+#include <yaml-cpp/node/parse.h>
 
 // This comes from yaml/Yaml.cpp:50
-static const std::string g_ErrorCannotOpenFile = "Cannot open file.";
 
 const core::config::LoadResult core::config::load_config(const std::string& path) noexcept {
-	Yaml::Node root;
 	try {
 
-		Yaml::Parse(root, path.c_str());
+		auto node = YAML::LoadFile(path);
+		return node;
 
-	} catch (const Yaml::Exception e) {
-		switch (e.Type()) {
-			case Yaml::Exception::InternalError:
-				break;
-			case Yaml::Exception::ParsingError:
-				return std::unexpected(ParseErr{
-					.reason = e.what(),
-					.where = e.Message()
-				});
-			case Yaml::Exception::OperationError:
-				if (e.what() == g_ErrorCannotOpenFile) {
-					return std::unexpected(FileNotFoundErr{ .file = path });
-				}
-		}
-	} 
-
-	return root;
+	} catch (const YAML::ParserException e) {
+		return std::unexpected(config::ParseErr{ .reason = e.what(), .where = e.msg });
+	} catch (const YAML::BadFile e) {
+		return std::unexpected(config::FileNotFoundErr{ .file = path });
+	} catch (YAML::Exception e) {
+		return std::unexpected("Spanish Inquisition");
+	}
 }
+

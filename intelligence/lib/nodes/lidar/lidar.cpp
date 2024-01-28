@@ -13,6 +13,7 @@ void loop_worker(core::topics::GlobalContext&, core::nodes::lidar::Context&);
 core::nodes::ApplicationNode core::nodes::lidar::create_node() {
 	return core::nodes::ApplicationNode{
 		.node = core::nodes::create_node<lidar::Context>(setup, end),
+		.name = "lidar"
 	};
 }
 

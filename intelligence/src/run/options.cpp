@@ -16,6 +16,10 @@ std::string repr_load_err(const core::config::LoadErr& err) {
 		std::string operator()(const core::config::ParseErr& err) {
 			return std::format("Failed to parse configuration file: {}\nat {}", err.reason, err.where);
 		}
+
+		std::string operator()(const std::string& err) {
+			return std::format("Unexpected: ", err);
+		}
 	} visitor;
 	return std::visit(visitor, err);
 }

@@ -15,6 +15,7 @@ namespace core::config {
 
 	using LoadErr = std::variant<
 		ParseErr,
-		FileNotFoundErr
+		FileNotFoundErr,
+		std::string
 	>;	
 }

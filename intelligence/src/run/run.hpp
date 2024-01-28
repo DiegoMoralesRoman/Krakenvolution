@@ -23,4 +23,7 @@ namespace run {
 
 	// Cleanup
 	void shutdown_application();
+
+	// Options
+	core::config::Config config_from_path(const std::string& path);
 }

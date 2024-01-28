@@ -11,11 +11,11 @@ struct Context {
 
 INIT_NODE(test_node, Context);
 
-void setup(core::topics::GlobalContext& global, Context& ctx) {
+void setup(core::topics::GlobalContext& global, Context& ctx, const core::config::Config& cfg) {
 
 }
 
-void end(core::topics::GlobalContext& global, Context& ctx) {
+void end(core::topics::GlobalContext& global, Context& ctx, const core::config::Config& cfg) {
 
 }
 

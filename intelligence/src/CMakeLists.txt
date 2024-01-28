@@ -21,6 +21,7 @@ set(MAIN_LIBS
 
 	# lib folder
 	nodes
+	config
 )
 
 if (SFML_FOUND)

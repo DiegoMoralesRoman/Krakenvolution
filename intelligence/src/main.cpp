@@ -8,7 +8,6 @@
 #include "run/flag/flag.hpp"
 
 #include "run/run.hpp"
-#include "yaml/Yaml.hpp"
 
 INITIALIZE_EASYLOGGINGPP
 
@@ -41,7 +40,10 @@ int main(int argc, char* argv[]) {
 		gui_thread = run::init_graphics_thread(running, global_context);
 	}
 
-	const core::config::Config config = Yaml::Node{};
+	const core::config::Config config = options->config_path.has_value()
+		? run::config_from_path(options->config_path.value())
+		: core::config::Config{};
+	if (not options->config_path.has_value()) { LOG(WARNING) << "No configuration specifided"; }
 
 	// Configure SIGINT function
 	sigint_func = [&](int signum) {

@@ -40,6 +40,7 @@ int main(int argc, char* argv[]) {
 	std::optional<std::thread> gui_thread;
 	if (options->graphics) {
 		gui_thread = run::init_graphics_thread(running, global_context);
+		if (not gui_thread.has_value()) { LOG(WARNING) << "Failed to init GUI, no SFML support in this binary"; }
 	}
 
 	core::config::Config config = options->config_path.has_value()
@@ -71,7 +72,7 @@ int main(int argc, char* argv[]) {
 	}
 
 	run::shutdown_application();
-	LOG(INFO) << "Closing application ";
+	LOG(INFO) << "Closing application \x1B[1m\x1B[38;2;245;169;184m>^·^<\x1B[0m";
 
 	return 0;
 }

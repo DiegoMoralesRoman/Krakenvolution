@@ -2,7 +2,6 @@
 #include "run.hpp"
 
 #include "easylogging/easylogging++.h"
-#include <algorithm>
 #include <cstdlib>
 #include <format>
 #include <variant>

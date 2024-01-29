@@ -1,6 +1,6 @@
 #pragma once
 
-#include "topics.hpp"
+#include "topics/topics.hpp"
 #include <atomic>
 #include <functional>
 #include <thread>

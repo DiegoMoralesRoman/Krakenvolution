@@ -1,7 +1,7 @@
 #pragma once
 
 #include "config/config.hpp"
-#include "topics.hpp"
+#include "topics/topics.hpp"
 
 #include <functional>
 #include <memory>

@@ -3,7 +3,6 @@
 #include "nodes/node.hpp"
 #include "rxcpp/operators/rx-observe_on.hpp"
 #include "rxcpp/rx-observable.hpp"
-#include "topics.hpp"
 #include <chrono>
 #include <functional>
 #include <future>

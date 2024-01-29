@@ -1,5 +1,6 @@
 #include "grid.hpp"
 #include "easylogging/easylogging++.h"
+#include <SFML/Graphics/Glsl.hpp>
 #include <string>
 
 const std::string frag_shader = R"(
@@ -8,17 +9,47 @@ precision mediump float;
 #endif
 
 uniform vec2 u_resolution;
-uniform vec2 u_mouse;
 uniform float u_time;
 
+uniform float u_zoom;
+uniform vec2 u_offset;
+
+float stepGridScale(float zoom) {
+    float baseScale = 10.0;
+    float step = 2.0; // Define the stepping factor for grid scale
+
+    // Calculate the scale factor based on zoom
+    float scaleFactor = pow(step, floor(log(zoom) / log(step)));
+
+    return baseScale / scaleFactor;
+}
+
 void main() {
-	vec2 st = gl_FragCoord.xy/u_resolution.xy;
-    st.x *= u_resolution.x/u_resolution.y;
+    vec2 aspectCorrect = vec2(u_resolution.x / u_resolution.y, 1.0);
+    
+    // Apply zoom and offset transformations
+    vec2 st = gl_FragCoord.xy / u_resolution.xy;
+    st = (st - 0.5) * aspectCorrect * u_zoom + 0.5 + u_offset;
 
-    vec3 color = vec3(0.);
-    color = vec3(st.x,st.y,abs(sin(u_time)));
+    // Dynamic grid scale based on zoom
+    float grid_scale = stepGridScale(u_zoom); 
 
-    gl_FragColor = vec4(color,1.0);
+    // Grid calculation
+    vec2 grid = mod(st * grid_scale, 1.0);
+    float line_width = 0.03; 
+    vec2 grid_mask = step(line_width, grid) * step(grid, vec2(1.0 - line_width));
+    float line = grid_mask.x * grid_mask.y;
+
+    // Circle calculations
+    float circleRadius = 0.5 / u_zoom; 
+    vec2 circleCenter = -u_offset; 
+    float dist = distance(st, circleCenter);
+    bool insideCircle = dist < circleRadius;
+
+    // Set color based on grid or circle
+    vec3 color = insideCircle ? vec3(1.0, 0.0, 0.0) : vec3(1.0) * line;
+    
+    gl_FragColor = vec4(color, 1.0);
 }
 )";
 
@@ -47,6 +78,11 @@ void run::graphics::components::Grid::render(Context& ctx) {
 	this->backdrop.setSize(view_size);
 	this->backdrop.setOrigin(view_size.x / 2.0f, view_size.y / 2.0f);
 	this->backdrop.setPosition(view_center);
+
+	float zoom_factor = 1.0 / view_size.y; // Assuming square pixels for simplicity
+	grid_shader.setUniform("u_zoom", zoom_factor);
+	this->grid_shader.setUniform("u_offset", sf::Glsl::Vec2{ view_center.x, view_center.y });
+	LOG(DEBUG) << view_center.x << ", " << view_center.y;
 
 	ctx.win.draw(this->backdrop, &this->grid_shader);
 }

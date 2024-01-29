@@ -76,6 +76,7 @@ void main_graphics_loop(
 
 	run::graphics::components::Enviroment env(ctx);
 
+	ctx.win.setView(ctx.view);
 	while (running) {
 		// ===========
 		// Read events

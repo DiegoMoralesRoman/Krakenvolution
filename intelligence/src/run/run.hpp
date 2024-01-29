@@ -7,7 +7,7 @@
 #include <optional>
 #include <thread>
 #include <vector>
-#include "topics.hpp"
+#include "topics/topics.hpp"
 
 namespace run {
 	// Parsing

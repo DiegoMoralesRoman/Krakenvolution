@@ -25,9 +25,23 @@ project(krakenvolution)
 set(CMAKE_CXX_STANDARD 23)
 
 set(CMAKE_CXX_FLAGS_RELEASE "-O3 -DNDEBUG")
+set(CMAKE_CXX_FLAGS_DEBUG "-O3 -g")
 
 # For RXCPP reasons I have to disable this warnings
 add_compile_options(-Wno-deprecated-declarations)
+
+set(CMAKE_CXX_INCLUDE_WHAT_YOU_USE include-what-you-use)
+# set(CLANG_TIDY_CHECKS "-checks=-*,modernize-*,llvm-include-order")
+# set(CLANG_TIDY_CHECKS "llvm-include-order")
+#
+# set(CMAKE_CXX_CLANG_TIDY 
+#     clang-tidy;
+#     -extra-arg=-std=c++2b;
+#     -extra-arg=-Wall;
+#     -extra-arg=-Wpedantic;
+#     -extra-arg=-stdlib=libc++;
+#     ${CLANG_TIDY_CHECKS}
+# )
 
 add_subdirectory(messages)
 include_directories(${PROTO_OUTPUT_DIR})
@@ -56,6 +70,13 @@ add_custom_target(valg
 )
 add_dependencies(valg ${PROJECT_NAME})
 
+add_custom_target(scan
+	COMMAND scan-build make
+	WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
+	COMMENT "Scans the project with clang"
+)
+# add_dependencies(scan ${PROJECT_NAME})
+
 enable_testing()
 add_subdirectory(test)
 
@@ -69,3 +90,16 @@ install(TARGETS ${PROJECT_NAME}
         RUNTIME DESTINATION bin
         LIBRARY DESTINATION lib
         ARCHIVE DESTINATION lib/static)
+
+# Include what you use
+# option(USE_IWYU "Use include what you use executable in the building process" OFF) 
+# if(USE_IWYU)
+# 	message("Option set IWYU")
+# 	find_program(iwyu_path NAMES include-what-you-use iwyu)
+# 	if(NOT iwyu_path)
+# 		message("${Yellow}Include what you use executable not found${Reset}")
+# 	else()
+# 		message("${Green}Include what you use executable found${Reset}")
+# 		set_property(TARGET ${PROJECT_NAME} PROPERTY CXX_INCLUDE_WHAT_YOU_USE ${iwyu_path})
+# 	endif()
+# endif()

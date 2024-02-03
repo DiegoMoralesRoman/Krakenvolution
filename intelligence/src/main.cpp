@@ -36,11 +36,12 @@ int main(int argc, char* argv[]) {
 		auto flag = run::flag::flag();
 		std::cout << flag << std::endl << std::endl;
 	}
+	LOG(INFO) << "🐈 Welcome to \x1b[1\x1b[32mKRAKENVOLUTION\x1b[0m!";
 
-	std::optional<std::thread> gui_thread;
+	std::optional<std::thread> gui_thread = std::nullopt;
 	if (options->graphics) {
 		gui_thread = run::init_graphics_thread(running, global_context);
-		if (not gui_thread.has_value()) { LOG(WARNING) << "Failed to init GUI, no SFML support in this binary"; }
+		if (not gui_thread.has_value()) { LOG(WARNING) << "❌Failed to init GUI, no SFML support in this binary"; }
 	}
 
 	core::config::Config config = options->config_path.has_value()
@@ -53,7 +54,7 @@ int main(int argc, char* argv[]) {
 	// ////////////////////// //
 		// Configure SIGINT function
 	sigint_func = [&](int signum) {
-		LOG(INFO) << "Received closing signal from user <Ctrl-C>";
+		LOG(INFO) << " Received closing signal from user <Ctrl-C>";
 		running = false;
 		running.notify_all();
 	};
@@ -72,7 +73,7 @@ int main(int argc, char* argv[]) {
 	}
 
 	run::shutdown_application();
-	LOG(INFO) << "Closing application \x1B[1m\x1B[38;2;245;169;184m>^·^<\x1B[0m";
+	LOG(INFO) << " Closing application \x1B[1m\x1B[38;2;245;169;184m>^·^<\x1B[0m";
 
 	return 0;
 }

@@ -6,7 +6,7 @@
 
 std::optional<std::thread> run::init_graphics_thread(std::atomic<bool>& running, core::topics::GlobalContext& global) {
 #ifdef HAS_SFML
-		LOG(INFO) << "Launching GUI";
+		LOG(INFO) << "󰵉 Launching GUI";
 
 		// Window event callback function
 		const auto on_gui_event = [&running](run::graphics::Event ev) {

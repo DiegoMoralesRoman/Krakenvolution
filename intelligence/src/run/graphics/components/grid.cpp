@@ -82,7 +82,6 @@ void run::graphics::components::Grid::render(Context& ctx) {
 	float zoom_factor = 1.0 / view_size.y; // Assuming square pixels for simplicity
 	grid_shader.setUniform("u_zoom", zoom_factor);
 	this->grid_shader.setUniform("u_offset", sf::Glsl::Vec2{ view_center.x, view_center.y });
-	LOG(DEBUG) << view_center.x << ", " << view_center.y;
 
 	ctx.win.draw(this->backdrop, &this->grid_shader);
 }

@@ -5,7 +5,7 @@
 #include <cstdlib>
 
 void run::init_nodes(std::vector<core::nodes::ApplicationNode>& nodes, core::topics::GlobalContext& global, core::config::Config& cfg) {
-	LOG(INFO) << "Initializing nodes";
+	LOG(INFO) << " Initializing nodes";
 	auto empty_cfg = core::config::Config{};
 
 	for (auto& an : nodes) {

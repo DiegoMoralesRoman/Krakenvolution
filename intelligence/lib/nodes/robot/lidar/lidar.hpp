@@ -1,8 +1,7 @@
 #pragma once
 
-#include "nodes/lidar/context.hpp"
+#include "context.hpp"
 #include "nodes/nodes.hpp"
-#include "config/config.hpp"
 #include "topics/topics.hpp"
 
 namespace core::nodes::lidar {

@@ -16,11 +16,19 @@ namespace rg = std::ranges;
  * @brief Centered lines that show after the main flag
  */
 const std::vector<std::string> INFO_LINES {
-	"-----------------------",
+	"",
 	"Created by",
 	"        \x1B[1mLaura Morales Román\x1B[0m",
-	"-----------------------",
-	std::format("{}v", run::info::VERSION)
+	// "                          \x1B[1m\x1B[38;2;245;169;184m>^·^<\x1B[0m",
+	// "          \x1b[31m\x1b[0m",
+	"\x1B[1m\x1B[38;2;245;169;184m",
+	"  \\    /\\  ",
+	"   )  ( ') ",
+	"  (  /  )  ",
+	"   \\(__)|  ",
+	"\x1B[0m"
+	// std::format("{}v", run::info::VERSION)
+	// std::format("{}v", run::info::VERSION)
 };
 
 /**

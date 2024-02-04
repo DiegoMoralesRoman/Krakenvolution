@@ -15,17 +15,20 @@ void core::extensions::remote::setup(::core::topics::GlobalContext &global, Cont
 	LOG(INFO) << " Initializing remote channels";
 
 	ctx.source_shared_ctx.conn_manager.on_new_channel([&global, &ctx](const Channel& channel) {
-		LOG(DEBUG) << "󰟥 Created channel [" << ctx.source_shared_ctx.conn_manager.find_managed_channel(channel)->get().name << ']';
-		channel.tx.on_next("Value");
+		std::string channel_name = ctx.source_shared_ctx.conn_manager.find_channel_name(channel).value_or("Unnamed channel");
+
+		LOG(DEBUG) << "󰟥 Created channel [\x1b[34m" << channel_name << "\x1b[0m]";
+
 		channel.rx
 			.take_until(global.stop_signal)
-			.subscribe([](const std::string& data) {
-
+			.subscribe([channel_name](const std::string& data) {
+				LOG(DEBUG) << "󰍩 Message from " << channel_name << ": " << data;
 			});
 	});
 
 	ctx.source_shared_ctx.conn_manager.on_removed_channel([&global, &ctx](const Channel& channel) {
-		LOG(DEBUG) << "󰟦 Removed channel [" << ctx.source_shared_ctx.conn_manager.find_managed_channel(channel)->get().name << ']';
+		std::string channel_name = ctx.source_shared_ctx.conn_manager.find_channel_name(channel).value_or("Unnamed channel");
+		LOG(DEBUG) << "󰟦 Removed channel [\x1b[34m" << channel_name << "\x1b[0m]";
 	});
 
 	// TCP

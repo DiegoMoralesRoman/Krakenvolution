@@ -67,7 +67,6 @@ void handle_client(const core::topics::GlobalContext& global, int socket_fd, soc
 
 	// CORE -> SOURCE Portion of the client
 	auto subscription = channel.rx.subscribe([socket_fd, &channel_name](const std::string& data) {
-		LOG(DEBUG) << "Sending data from " << channel_name << ": " << data;
 		send(socket_fd, data.data(), data.size(), 0);
 	});
 
@@ -79,7 +78,6 @@ void handle_client(const core::topics::GlobalContext& global, int socket_fd, soc
 		std::string message(buffer.data(), n_recv);
 
 		channel.tx.on_next(message);
-		LOG(DEBUG) << "Message from " << channel_name << ": " << message;
 	}
 
 	conn_manager.remove_channel(channel);
@@ -108,9 +106,9 @@ void handle_new_connections(core::extensions::remote::sources::tcp::Context& ctx
 		tv.tv_usec = 500E3;
 		int retval = select(ctx.sock_fd + 1, &file_descriptors, NULL, NULL, &tv);
 		if (retval == -1) {
-			LOG(ERROR) << "Failed to select socket for accepting connections";
+			LOG(ERROR) << " Failed to select socket for accepting connections";
 			if (fail_count++ >= MAX_FAILS) {
-				LOG(ERROR) << "Too many failures, closing server...";
+				LOG(ERROR) << " Too many failures, closing server...";
 				break;
 			}
 		} else if (retval) {
@@ -131,13 +129,13 @@ void handle_new_connections(core::extensions::remote::sources::tcp::Context& ctx
 	}
 	close(ctx.sock_fd);
 	// Close all connections
-	LOG(INFO) << "Closing all connections";
+	LOG(INFO) << "󰔟 Closing all connections";
 	for (auto& conn : connections) {
 		shutdown(conn.socket_fd, SHUT_RDWR);
 		close(conn.socket_fd);
 		if (conn.thread_handle.joinable()) { conn.thread_handle.join(); }
 	}
-	LOG(INFO) << "Connections closed";
+	LOG(INFO) << " Connections closed";
 }
 
 // ////////////// //
@@ -162,7 +160,7 @@ std::optional<std::thread> core::extensions::remote::sources::tcp::init_server(t
 				return std::format("Failed to set REUSEADDR: {}", err.reason);
 			}
 		} visitor;
-		LOG(ERROR) << "Failed to initialize TCP server:";
+		LOG(ERROR) << " Failed to initialize TCP server:";
 		LOG(ERROR) << std::visit(visitor, result.error());
 		return std::nullopt;
 	}

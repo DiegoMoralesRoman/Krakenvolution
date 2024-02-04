@@ -27,7 +27,10 @@ int main(int argc, char* argv[]) {
 	auto nodes = core::nodes::create_all_nodes();
 
 	auto options = run::parse_cli(argc, argv);
-	if (options == nullptr) return 0;
+	if (options == nullptr) {
+		LOG(ERROR) << "󰆍 Failed to initialize CLI parser";
+		exit(1);
+	};
 
 	// ///////////////////////////////// //
 	// Interpreting command line options //
@@ -47,7 +50,7 @@ int main(int argc, char* argv[]) {
 	core::config::Config config = options->config_path.has_value()
 		? run::config_from_path(options->config_path.value())
 		: core::config::Config{};
-	if (not options->config_path.has_value()) { LOG(WARNING) << "No configuration specifided"; }
+	if (not options->config_path.has_value()) { LOG(WARNING) << " No configuration specifided"; }
 
 	// ////////////////////// //
 	// Initialize application //
@@ -66,14 +69,14 @@ int main(int argc, char* argv[]) {
 
 	run::teardown_nodes(nodes, global_context, config);
 
-	LOG(INFO) << "Stopping threads...";
+	LOG(INFO) << "󰔟 Stopping threads";
 	if (options->graphics && gui_thread.has_value()) {
 		gui_thread->join();
 		LOG(INFO) << "GUI stopped";
 	}
 
 	run::shutdown_application();
-	LOG(INFO) << " Closing application \x1B[1m\x1B[38;2;245;169;184m>^·^<\x1B[0m";
+	LOG(INFO) << " Closing application \x1B[1m\x1B[38;2;245;169;184m>^.^<\x1B[0m";
 
 	return 0;
 }

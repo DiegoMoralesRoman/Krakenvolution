@@ -66,15 +66,19 @@ void ConnectionManager::run_remove_channel_callbacks(const Channel& channel) con
 	}
 }
 
-std::optional<std::reference_wrapper<const ManagedChannel>> ConnectionManager::find_managed_channel(const Channel& channel) const {
+std::optional<std::string> ConnectionManager::find_channel_name(const Channel& channel) const {
+	return find_channel_name(channel.UID);
+}
+
+std::optional<std::string> ConnectionManager::find_channel_name(const decltype(Channel::UID)& UID) const {
 	auto iter = std::find_if(
 		this->connected_channels.begin(),
 		this->connected_channels.end(),
-		[&channel](const ManagedChannel& cmp) {
-			return cmp.source_channel == channel;
+		[UID](const ManagedChannel& cmp) {
+			return cmp.source_channel.UID == UID;
 		}
 	);
-
+	
 	if (iter == this->connected_channels.end()) { return std::nullopt; }
-	else { return *iter; }
+	else { return iter->name; }
 }

@@ -24,7 +24,7 @@ std::string repr_load_err(const core::config::LoadErr& err) {
 }
 
 core::config::Config run::config_from_path(const std::string &path) {
-	LOG(INFO) << " Loading configuration from " << path;
+	LOG(INFO) << "󰔟  Loading configuration from " << path;
 	const auto config = core::config::load_config(path);
 	if (config.has_value()) {
 		LOG(INFO) << " Configuration loaded";

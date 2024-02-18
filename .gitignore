@@ -1,2 +1,4 @@
 Session.vim
 build
+.envrc
+flake.lock

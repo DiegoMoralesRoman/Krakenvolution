@@ -1,11 +1,13 @@
 add_subdirectory(easylogging)
 add_subdirectory(dbscan)
+add_subdirectory(ftxui)
 
 set(THIRD_PARTY
 	rxcpp
 	dbscan
 	easylogging++
 	mini-yaml
+	ftxui
 )
 
 message("${Yellow}Using the following third party libraries:${Reset}")

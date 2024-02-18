@@ -1,6 +1,9 @@
 #include "remote.hpp"
 #include "easylogging/easylogging++.h"
 #include "nodes/node.hpp"
+#include "channel_linking.hpp"
+
+#include "messages/remote.pb.h"
 
 #include "sources/tcp/tcp.hpp"
 
@@ -14,21 +17,50 @@ core::nodes::ApplicationNode core::extensions::remote::create_node() {
 void core::extensions::remote::setup(::core::topics::GlobalContext &global, Context &ctx, const ::core::config::Config &cfg) {
 	LOG(INFO) << " Initializing remote channels";
 
-	ctx.source_shared_ctx.conn_manager.on_new_channel([&global, &ctx](const Channel& channel) {
+	ctx.source_shared_ctx.conn_manager.on_new_channel([&global, &ctx](const core::serial::Channel& channel) {
 		std::string channel_name = ctx.source_shared_ctx.conn_manager.find_channel_name(channel).value_or("Unnamed channel");
-
-		LOG(DEBUG) << "󰟥 Created channel [\x1b[34m" << channel_name << "\x1b[0m]";
-
+		LOG(DEBUG) << "󰟥 Created channel [" << channel_name << ']';
 		channel.rx
 			.take_until(global.stop_signal)
-			.subscribe([channel_name](const std::string& data) {
-				LOG(DEBUG) << "󰍩 Message from " << channel_name << ": " << data;
+			.subscribe([channel_name, &global, &channel, &ctx](const std::string& data) {
+				Subscribe subscription;
+				Publish publish;
+				if (subscription.ParseFromString(data)) {
+					auto result = create_subscription(subscription, global.topics.serialized, channel);
+					if (result.has_value()) {
+						LOG(INFO) << "󰄐 Subscription from " << channel_name << " to " << subscription.topic();
+						ctx.channel_subscriptions[channel.UID].push_back(result.value());
+						LOG(INFO) << "Channel " << channel_name << " has now " << ctx.channel_subscriptions[channel.UID].size() << " subscriptions";
+					} else {
+						LOG(WARNING) << " Failed subscription from " << channel_name << " to " << subscription.topic();
+					}
+				} else if (publish.ParseFromString(data)) {
+					if (manage_publish(publish, global.topics.serialized)) {
+						LOG(INFO) << "󰍩 Publish from " << channel_name << " to " << publish.topic();
+					} else {
+						LOG(WARNING) << " Failed to publish from " << channel_name << " to " << publish.topic();
+					}
+				} else {
+					LOG(DEBUG) << "󰍩 Untyped message from " << channel_name << ": " << data;
+					// TODO: add topic for these kind of messages
+				}
 			});
 	});
 
-	ctx.source_shared_ctx.conn_manager.on_removed_channel([&global, &ctx](const Channel& channel) {
+	ctx.source_shared_ctx.conn_manager.on_removed_channel([&ctx](const core::serial::Channel& channel) {
 		std::string channel_name = ctx.source_shared_ctx.conn_manager.find_channel_name(channel).value_or("Unnamed channel");
-		LOG(DEBUG) << "󰟦 Removed channel [\x1b[34m" << channel_name << "\x1b[0m]";
+
+		auto subscriptions_iter = ctx.channel_subscriptions.find(channel.UID);
+		if (subscriptions_iter != ctx.channel_subscriptions.end()) {
+			const auto& [key, subscriptions] = *subscriptions_iter;
+
+			LOG(DEBUG) << "Removing " << subscriptions.size() << " subscriptions from " << channel_name;
+			for (const auto& sub : subscriptions) {
+				sub.unsubscribe();
+			}
+		}
+
+		LOG(DEBUG) << "󰟦 Removed channel [" << channel_name << ']';
 	});
 
 	// TCP

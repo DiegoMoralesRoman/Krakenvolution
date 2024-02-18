@@ -1,17 +1,17 @@
+#include <chrono>
 #include <iostream>
-
-#include "messages/test.pb.h"
+#include <rxcpp/rx.hpp>
+#include <thread>
 
 int main() {
-	std::cout << "Hello world" << std::endl;
-	Person p;
-	p.set_name("Kekosaurio");
-	p.set_id(123);
+	rxcpp::subjects::subject<int> nums;
+	auto other = nums;
+	nums.get_observable().subscribe([](const int msg) { std::cout << "[NUMS] " << msg << std::endl; });
 
-	auto serialized = p.SerializeAsString();
+	std::cout << "Size: " << sizeof(nums) << std::endl;
 
-	Person deser;
-	deser.ParseFromString(serialized);
-
-	std::cout << "Name: " << deser.name() << ", id: " << deser.id() << std::endl;
+	for (int i = 0; i < 10; i++) {
+		std::this_thread::sleep_for(std::chrono::seconds(1));
+		other.get_subscriber().on_next(i);
+	}
 }

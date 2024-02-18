@@ -8,6 +8,8 @@
 #include "rxcpp/rx-observable.hpp"
 #include "rxcpp/subjects/rx-subject.hpp"
 // Protobuf messages
+#include "messages/test.pb.h"
+#include "serial/channel.hpp"
 
 namespace core::topics {
 	/*=============
@@ -16,8 +18,8 @@ namespace core::topics {
 	struct Topics {
 		Topics();
 		// rxcpp::subjects::subject<messages::Detection> detections;
-		rxcpp::subjects::subject<int> test;
-		std::unordered_map<std::string, rxcpp::observable<std::string>> serialized;
+		rxcpp::subjects::subject<Person> person;
+		std::unordered_map<std::string, serial::ObserverMapping> serialized;
 	};
 
 	struct GlobalContext {

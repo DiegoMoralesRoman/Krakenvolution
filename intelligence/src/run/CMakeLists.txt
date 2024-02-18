@@ -3,7 +3,7 @@ file(GLOB FILES
 )
 
 list(LENGTH FILES NUM_FILES)
-message("${Green}Found ${NUM_FILES} source files for main executable${Reset}")
+message("${Green}Found ${NUM_FILES} extra source files for main executable${Reset}")
 
 set(MAIN_FILES "${FILES}" PARENT_SCOPE)
 

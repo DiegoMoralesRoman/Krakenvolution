@@ -1,6 +1,6 @@
 #pragma once
 
-#include "channel.hpp"
+#include "serial/channel.hpp"
 
 #include <functional>
 #include <optional>
@@ -17,26 +17,26 @@ namespace core::extensions::remote {
 		ConnectionManager& operator=(const ConnectionManager &) = delete;
 		ConnectionManager& operator=(ConnectionManager &&) = default;
 
-		Channel& new_channel(const std::string& name);
-		bool remove_channel(const Channel& channel);
+		core::serial::Channel& new_channel(const std::string& name);
+		bool remove_channel(const core::serial::Channel& channel);
 
 		template <typename Func>
 		void on_new_channel(const Func& callback) { this->new_channel_callbacks.push_back(callback); }
 		template <typename Func>
 		void on_removed_channel(const Func& callback) { this->deleted_channel_callbacks.push_back(callback); }
 
-		// std::optional<std::reference_wrapper<const ManagedChannel>> find_managed_channel(const Channel& channel) const;
-		std::optional<std::string> find_channel_name(const Channel& channel) const;
-		std::optional<std::string> find_channel_name(const decltype(Channel::UID)& UID) const;
+		// std::optional<std::reference_wrapper<const ManagedChannel>> find_managed_channel(const core::serial::Channel& channel) const;
+		std::optional<std::string> find_channel_name(const core::serial::Channel& channel) const;
+		std::optional<std::string> find_channel_name(const decltype(core::serial::Channel::UID)& UID) const;
 
-		std::vector<ManagedChannel>& channels();
+		std::vector<core::serial::ManagedChannel>& channels();
 	private:
-		std::vector<ManagedChannel> connected_channels;
+		std::vector<core::serial::ManagedChannel> connected_channels;
 
-		std::vector<std::function<void(const Channel&)>> new_channel_callbacks;
-		std::vector<std::function<void(const Channel&)>> deleted_channel_callbacks;
+		std::vector<std::function<void(const core::serial::Channel&)>> new_channel_callbacks;
+		std::vector<std::function<void(const core::serial::Channel&)>> deleted_channel_callbacks;
 
-		void run_new_channel_callbacks(const Channel& channel) const;
-		void run_remove_channel_callbacks(const Channel& channel) const;
+		void run_new_channel_callbacks(const core::serial::Channel& channel) const;
+		void run_remove_channel_callbacks(const core::serial::Channel& channel) const;
 	};
 }

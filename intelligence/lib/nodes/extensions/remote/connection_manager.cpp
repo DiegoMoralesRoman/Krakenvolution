@@ -5,18 +5,18 @@
 
 using namespace core::extensions::remote;
 
-Channel& ConnectionManager::new_channel(const std::string& name) {
+core::serial::Channel& ConnectionManager::new_channel(const std::string& name) {
 	rxcpp::subjects::subject<std::string> to_source;
 	rxcpp::subjects::subject<std::string> from_source;
 
 	uint64_t new_channel_UID = random();
-	ManagedChannel& new_channel = this->connected_channels.emplace_back(ManagedChannel{
-		.source_channel = Channel {
+	core::serial::ManagedChannel& new_channel = this->connected_channels.emplace_back(core::serial::ManagedChannel{
+		.source_channel = core::serial::Channel {
 			.rx = to_source.get_observable(),
 			.tx = from_source.get_subscriber(),
 			.UID = new_channel_UID
 		},
-		.core_channel = Channel {
+		.core_channel = core::serial::Channel {
 			.rx = from_source.get_observable(),
 			.tx = to_source.get_subscriber(),
 			.UID = new_channel_UID
@@ -31,11 +31,11 @@ Channel& ConnectionManager::new_channel(const std::string& name) {
 	return new_channel.source_channel;
 }
 
-bool ConnectionManager::remove_channel(const Channel& channel) {
+bool ConnectionManager::remove_channel(const core::serial::Channel& channel) {
 	auto iter = std::find_if(
 		this->connected_channels.begin(),
 		this->connected_channels.end(),
-		[&channel](const ManagedChannel& cmp) {
+		[&channel](const core::serial::ManagedChannel& cmp) {
 			return cmp.source_channel == channel;
 		}
 	);
@@ -50,31 +50,31 @@ bool ConnectionManager::remove_channel(const Channel& channel) {
 	}
 }
 
-std::vector<ManagedChannel>& ConnectionManager::channels() {
+std::vector<core::serial::ManagedChannel>& ConnectionManager::channels() {
 	return this->connected_channels;
 }
 
-void ConnectionManager::run_new_channel_callbacks(const Channel& channel) const {
+void ConnectionManager::run_new_channel_callbacks(const core::serial::Channel& channel) const {
 	for (const auto& callback : this->new_channel_callbacks) {
 		callback(channel);
 	}
 }
 
-void ConnectionManager::run_remove_channel_callbacks(const Channel& channel) const {
+void ConnectionManager::run_remove_channel_callbacks(const core::serial::Channel& channel) const {
 	for (const auto& callback : this->deleted_channel_callbacks) {
 		callback(channel);
 	}
 }
 
-std::optional<std::string> ConnectionManager::find_channel_name(const Channel& channel) const {
+std::optional<std::string> ConnectionManager::find_channel_name(const core::serial::Channel& channel) const {
 	return find_channel_name(channel.UID);
 }
 
-std::optional<std::string> ConnectionManager::find_channel_name(const decltype(Channel::UID)& UID) const {
+std::optional<std::string> ConnectionManager::find_channel_name(const decltype(core::serial::Channel::UID)& UID) const {
 	auto iter = std::find_if(
 		this->connected_channels.begin(),
 		this->connected_channels.end(),
-		[UID](const ManagedChannel& cmp) {
+		[UID](const core::serial::ManagedChannel& cmp) {
 			return cmp.source_channel.UID == UID;
 		}
 	);

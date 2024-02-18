@@ -34,7 +34,7 @@ if (SFML_FOUND)
 	target_compile_definitions(${PROJECT_NAME} PRIVATE HAS_SFML)
 	add_subdirectory(run/graphics)
 else()
-	message("${Yellow}SFML was not found, compiling without graphicsl options${Reset}")
+	message("${Yellow}SFML was not found, compiling without graphical options${Reset}")
 endif()
 
 target_link_libraries(${PROJECT_NAME} 
@@ -44,6 +44,23 @@ target_link_libraries(${PROJECT_NAME}
 add_executable(tests tests.cpp)
 target_link_libraries(tests
 	${MAIN_LIBS}
+)
+
+add_subdirectory(sender)
+
+set(SENDER_LIBS
+	# Third party
+	easylogging
+	ftxui
+	
+	# Messages
+	messages
+	sender_cliparser
+)
+
+add_executable(msgsender sender.cpp ${SENDER_FILES})
+target_link_libraries(msgsender
+	${SENDER_LIBS}
 )
 
 add_dependencies(tests messages)

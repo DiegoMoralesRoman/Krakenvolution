@@ -3,7 +3,7 @@
 #include <cstdint>
 #include <rxcpp/rx.hpp>
 
-namespace core::extensions::remote {
+namespace core::serial {
 	struct Channel {
 		rxcpp::observable<std::string> rx;
 		rxcpp::subscriber<std::string> tx;
@@ -19,5 +19,10 @@ namespace core::extensions::remote {
 		// RXCPP
 		rxcpp::subjects::subject<std::string> to_source;
 		rxcpp::subjects::subject<std::string> from_source;
+	};
+
+	struct ObserverMapping {
+		rxcpp::subjects::subject<std::string> from_source;
+		Channel to_core_channel;
 	};
 }

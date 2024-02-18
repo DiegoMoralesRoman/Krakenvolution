@@ -8,6 +8,7 @@
 #include "run/flag/flag.hpp"
 
 #include "run/run.hpp"
+#include "serial/topics.hpp"
 
 INITIALIZE_EASYLOGGINGPP
 
@@ -24,11 +25,12 @@ int main(int argc, char* argv[]) {
 	std::atomic<bool> running = true;
 
 	core::topics::GlobalContext global_context (&running);
+
 	auto nodes = core::nodes::create_all_nodes();
 
 	auto options = run::parse_cli(argc, argv);
 	if (options == nullptr) {
-		LOG(ERROR) << "󰆍 Failed to initialize CLI parser";
+		LOG(ERROR) << "󰆍 Failed to process CLI args";
 		exit(1);
 	};
 
@@ -39,7 +41,14 @@ int main(int argc, char* argv[]) {
 		auto flag = run::flag::flag();
 		std::cout << flag << std::endl << std::endl;
 	}
+
 	LOG(INFO) << "🐈 Welcome to \x1b[1\x1b[32mKRAKENVOLUTION\x1b[0m!";
+
+	global_context.topics.serialized.merge(core::serial::mapping(global_context));
+	LOG(INFO) << "󰑓 Loaded serde topics: ";
+	for (const auto& [key, value] : global_context.topics.serialized) {
+		LOG(INFO) << "󰛳 " << key;
+	}
 
 	std::optional<std::thread> gui_thread = std::nullopt;
 	if (options->graphics) {

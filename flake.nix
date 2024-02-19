@@ -18,11 +18,33 @@
             cmake
             sfml
             gtest
+			protobuf
+			yaml-cpp
           ];
 
-          # Set any environment variables or shell hooks you need for development
+		 shellHook = ''
+            export SHELL=${pkgs.zsh}/bin/zsh
+          '';         # Set any environment variables or shell hooks you need for development
         };
 
-        # You can also define a `packages` attribute if you want to build and package your application
+		# TODO: make proper build step
+        packages = {
+          my-app = pkgs.stdenv.mkDerivation {
+            name = "my-app";
+            src = self;
+            buildInputs = with pkgs; [ gcc cmake sfml gtest ];
+            # Replace this with your actual build commands
+            buildPhase = ''
+              cmake .
+              make
+            '';
+            installPhase = ''
+              mkdir -p $out/bin
+              cp my-app $out/bin/
+            '';
+          };
+        };
+
+        defaultPackage = self.packages.my-app;
       });
 }

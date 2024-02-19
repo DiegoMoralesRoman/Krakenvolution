@@ -24,7 +24,7 @@
 
 void handle_new_connections(core::extensions::remote::sources::tcp::Context& ctx, core::topics::GlobalContext& global, core::extensions::remote::SourceSharedContext& shared_ctx);
 
-core::extensions::remote::sources::tcp::CreateServerResult core::extensions::remote::sources::tcp::create_server(topics::GlobalContext &global, tcp::Context& ctx, SourceSharedContext& shared_ctx, const config::Config& cfg) {
+auto core::extensions::remote::sources::tcp::create_server(topics::GlobalContext &global, tcp::Context& ctx, SourceSharedContext& shared_ctx, const config::Config& cfg) -> core::extensions::remote::sources::tcp::CreateServerResult {
 	const auto port = cfg["port"].IsDefined() ? cfg["port"].as<int>():8080;
 	const auto addr = cfg["addr"].IsDefined() ? cfg["addr"].as<std::string>():"127.0.0.1";
 	const auto max_conns = cfg["max_conns"].IsDefined() ? cfg["max_conns"].as<int>():10;
@@ -59,7 +59,7 @@ core::extensions::remote::sources::tcp::CreateServerResult core::extensions::rem
 	return std::thread(handle_new_connections, std::ref(ctx), std::ref(global), std::ref(shared_ctx));
 }
 
-void handle_client(const core::topics::GlobalContext& global, int socket_fd, sockaddr_in remote_addr, core::extensions::remote::ConnectionManager& conn_manager) {
+auto handle_client(const core::topics::GlobalContext& global, int socket_fd, sockaddr_in remote_addr, core::extensions::remote::ConnectionManager& conn_manager) -> void {
 	LOG(INFO) << "󰈁 New connection " << inet_ntoa(remote_addr.sin_addr) << ":" << ntohs(remote_addr.sin_port);
 
 	std::string channel_name = std::format("TCP {}:{}", inet_ntoa(remote_addr.sin_addr), ntohs(remote_addr.sin_port));
@@ -85,7 +85,7 @@ void handle_client(const core::topics::GlobalContext& global, int socket_fd, soc
 	close(socket_fd);
 }
 
-void handle_new_connections(core::extensions::remote::sources::tcp::Context& ctx, core::topics::GlobalContext& global, core::extensions::remote::SourceSharedContext& shared_ctx) {
+auto handle_new_connections(core::extensions::remote::sources::tcp::Context& ctx, core::topics::GlobalContext& global, core::extensions::remote::SourceSharedContext& shared_ctx) -> void {
 	fd_set file_descriptors{};
 	timeval tv{};
 
@@ -142,7 +142,7 @@ void handle_new_connections(core::extensions::remote::sources::tcp::Context& ctx
 // Initialization //
 // ////////////// //
 
-std::optional<std::thread> core::extensions::remote::sources::tcp::init_server(topics::GlobalContext &global, tcp::Context& ctx, SourceSharedContext& shared_ctx, const config::Config& cfg) {
+auto core::extensions::remote::sources::tcp::init_server(topics::GlobalContext &global, tcp::Context& ctx, SourceSharedContext& shared_ctx, const config::Config& cfg) -> std::optional<std::thread> {
 	auto result = create_server(global, ctx, shared_ctx, cfg);
 
 	if (not result.has_value()) {

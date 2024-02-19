@@ -12,9 +12,9 @@ namespace run::graphics {
 		CLOSE
 	};
 
-	std::thread init_graphics(
+	auto init_graphics(
 			const std::atomic<bool>& running,
 			core::topics::GlobalContext& global,
 			const std::function<void(Event)>&
-		);
+		) -> std::thread;
 }

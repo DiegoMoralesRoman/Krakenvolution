@@ -5,7 +5,7 @@
 
 using namespace core::extensions::remote;
 
-core::serial::Channel& ConnectionManager::new_channel(const std::string& name) {
+auto ConnectionManager::new_channel(const std::string& name) -> core::serial::Channel& {
 	rxcpp::subjects::subject<std::string> to_source;
 	rxcpp::subjects::subject<std::string> from_source;
 
@@ -31,7 +31,7 @@ core::serial::Channel& ConnectionManager::new_channel(const std::string& name) {
 	return new_channel.source_channel;
 }
 
-bool ConnectionManager::remove_channel(const core::serial::Channel& channel) {
+auto ConnectionManager::remove_channel(const core::serial::Channel& channel) -> bool {
 	auto iter = std::find_if(
 		this->connected_channels.begin(),
 		this->connected_channels.end(),
@@ -50,27 +50,27 @@ bool ConnectionManager::remove_channel(const core::serial::Channel& channel) {
 	}
 }
 
-std::vector<core::serial::ManagedChannel>& ConnectionManager::channels() {
+auto ConnectionManager::channels() -> std::vector<core::serial::ManagedChannel>& {
 	return this->connected_channels;
 }
 
-void ConnectionManager::run_new_channel_callbacks(const core::serial::Channel& channel) const {
+auto ConnectionManager::run_new_channel_callbacks(const core::serial::Channel& channel) const -> void {
 	for (const auto& callback : this->new_channel_callbacks) {
 		callback(channel);
 	}
 }
 
-void ConnectionManager::run_remove_channel_callbacks(const core::serial::Channel& channel) const {
+auto ConnectionManager::run_remove_channel_callbacks(const core::serial::Channel& channel) const -> void {
 	for (const auto& callback : this->deleted_channel_callbacks) {
 		callback(channel);
 	}
 }
 
-std::optional<std::string> ConnectionManager::find_channel_name(const core::serial::Channel& channel) const {
+auto ConnectionManager::find_channel_name(const core::serial::Channel& channel) const -> std::optional<std::string> {
 	return find_channel_name(channel.UID);
 }
 
-std::optional<std::string> ConnectionManager::find_channel_name(const decltype(core::serial::Channel::UID)& UID) const {
+auto ConnectionManager::find_channel_name(const decltype(core::serial::Channel::UID)& UID) const -> std::optional<std::string> {
 	auto iter = std::find_if(
 		this->connected_channels.begin(),
 		this->connected_channels.end(),

@@ -31,7 +31,7 @@ namespace core {
 				this->states.transitions[static_cast<size_t>(this->current_state)]();
 			}
 
-			void update(S::Event ev) {
+			auto update(S::Event ev) -> void {
 				auto new_state = this->states.states[static_cast<size_t>(this->current_state)](ev);
 				if (new_state != this->current_state) {
 					this->states.transitions[static_cast<size_t>(new_state)]();
@@ -39,8 +39,8 @@ namespace core {
 				this->current_state = new_state;
 			}
 
-			S::State get_current_state() const { return this->current_state; }
-			const S& get_ctx() const { return this->states; };
+			auto get_current_state() const -> S::State { return this->current_state; }
+			auto get_ctx() const -> const S& { return this->states; };
 		private:
 			S states {};
 			S::State current_state = S::DEFAULT_STATE;

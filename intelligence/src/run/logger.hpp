@@ -16,7 +16,7 @@ namespace run::log {
 	 * 	I would recommend this configuration to be extended outside if there is need to do so
 	 * @todo Should add a source file for the function implementation
 	 */
-	el::Configurations get_config() {
+	auto get_config() -> el::Configurations {
 		el::Configurations conf;
 
 		conf.setToDefault();

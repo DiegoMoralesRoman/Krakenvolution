@@ -7,8 +7,8 @@ namespace run::graphics::components {
 	class Enviroment {
 		public:
 			Enviroment(Context& ctx);
-			void update(Context& ctx);
-			void render(Context& ctx);
+			auto update(Context& ctx) -> void;
+			auto render(Context& ctx) -> void;
 
 		private:
 			Grid grid;

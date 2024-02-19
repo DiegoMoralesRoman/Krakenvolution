@@ -35,10 +35,10 @@ run::graphics::components::Enviroment::Enviroment(run::graphics::Context& ctx)
 
 }
 
-void run::graphics::components::Enviroment::update(Context& ctx) {
+auto run::graphics::components::Enviroment::update(Context& ctx) -> void {
 	grid.update(ctx);
 }
 
-void run::graphics::components::Enviroment::render(Context& ctx) {
+auto run::graphics::components::Enviroment::render(Context& ctx) -> void {
 	grid.render(ctx);
 }

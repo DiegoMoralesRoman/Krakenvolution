@@ -18,7 +18,7 @@ namespace core::serial{
 
 
 	template <ProtoMessage Message> 
-	ObserverMapping gen_mapping(rxcpp::subjects::subject<Message> subject) {
+	auto gen_mapping(rxcpp::subjects::subject<Message> subject) -> ObserverMapping {
 		auto from_source = rxcpp::subjects::subject<std::string>();
 		ObserverMapping mapping {
 			.from_source = from_source,
@@ -41,6 +41,6 @@ namespace core::serial{
 		return mapping;
 	}
 
-	std::unordered_map<std::string, ObserverMapping> mapping(nodes::GlobalContext& ctx);
+	auto mapping(nodes::GlobalContext& ctx) -> std::unordered_map<std::string, ObserverMapping>;
 	// decltype(auto) mapping(nodes::GlobalContext& ctx);
 }

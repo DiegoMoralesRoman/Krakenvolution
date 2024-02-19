@@ -9,7 +9,7 @@
 
 using namespace sender;
 
-void tui::run() {
+auto tui::run() -> void {
 	using namespace ftxui;
 
 	auto app = sender::tui::components::app();

@@ -4,7 +4,7 @@
 #include "graphics/graphics.hpp"
 #include <easylogging/easylogging++.h>
 
-std::optional<std::thread> run::init_graphics_thread(std::atomic<bool>& running, core::topics::GlobalContext& global) {
+auto run::init_graphics_thread(std::atomic<bool>& running, core::topics::GlobalContext& global) -> std::optional<std::thread> {
 #ifdef HAS_SFML
 		LOG(INFO) << "󰵉 Launching GUI";
 

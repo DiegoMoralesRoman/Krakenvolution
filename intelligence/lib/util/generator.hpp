@@ -7,17 +7,17 @@ template<typename T>
 struct Generator {
     struct promise_type {
         std::optional<T> current_value;
-        std::suspend_always yield_value(T value) {
+        auto yield_value(T value) -> std::suspend_always {
             current_value = value;
             return {};
         }
-        std::suspend_always initial_suspend() { return {}; }
-        std::suspend_always final_suspend() noexcept { return {}; }
-        Generator get_return_object() {
+        auto initial_suspend() -> std::suspend_always { return {}; }
+        auto final_suspend() noexcept -> std::suspend_always { return {}; }
+        auto get_return_object() -> Generator {
             return Generator{std::coroutine_handle<promise_type>::from_promise(*this)};
         }
-        void return_void() {}
-        void unhandled_exception() {
+        auto return_void() -> void {}
+        auto unhandled_exception() -> void {
             std::exit(1);
         }
     };
@@ -28,21 +28,21 @@ struct Generator {
 
         iterator(std::coroutine_handle<promise_type> coro, bool done) : coro(coro), done(done) {}
 
-        iterator& operator++() {
+        auto operator++() -> iterator& {
             coro.resume();
             done = coro.done();
             return *this;
         }
 
-        const T& operator*() const {
+        auto operator*() const -> const T& {
             return *coro.promise().current_value;
         }
 
-        bool operator==(const iterator& other) const {
+        auto operator==(const iterator& other) const -> bool {
             return done == other.done;
         }
 
-        bool operator!=(const iterator& other) const {
+        auto operator!=(const iterator& other) const -> bool {
             return !(*this == other);
         }
     };

@@ -4,7 +4,7 @@
 #include "easylogging/easylogging++.h"
 #include <cstdlib>
 
-void run::init_nodes(std::vector<core::nodes::ApplicationNode>& nodes, core::topics::GlobalContext& global, core::config::Config& cfg) {
+auto run::init_nodes(std::vector<core::nodes::ApplicationNode>& nodes, core::topics::GlobalContext& global, core::config::Config& cfg) -> void{
 	LOG(INFO) << "󰔟 Initializing nodes";
 	auto empty_cfg = core::config::Config{};
 
@@ -27,7 +27,7 @@ void run::init_nodes(std::vector<core::nodes::ApplicationNode>& nodes, core::top
 	LOG(INFO) << " Setup complete!";
 }
 
-void run::teardown_nodes(std::vector<core::nodes::ApplicationNode>& nodes, core::topics::GlobalContext& global, core::config::Config& cfg) {
+auto run::teardown_nodes(std::vector<core::nodes::ApplicationNode>& nodes, core::topics::GlobalContext& global, core::config::Config& cfg) -> void {
 	LOG(INFO) << "󰔟 Stopping nodes";
 	auto empty_cfg = core::config::Config{};
 

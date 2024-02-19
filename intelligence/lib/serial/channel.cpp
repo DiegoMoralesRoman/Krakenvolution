@@ -2,6 +2,6 @@
 
 using namespace core::serial;
 
-bool Channel::operator==(const Channel& other) const {
+auto Channel::operator==(const Channel& other) const -> bool {
 	return this->UID == other.UID;
 }

@@ -68,11 +68,11 @@ run::graphics::components::Grid::Grid(run::graphics::Context& ctx) {
 	});
 }
 
-void run::graphics::components::Grid::update(Context& ctx) {
+auto run::graphics::components::Grid::update(Context& ctx) -> void {
 	this->grid_shader.setUniform("u_time", ctx.clock.getElapsedTime().asSeconds());
 }
 
-void run::graphics::components::Grid::render(Context& ctx) {
+auto run::graphics::components::Grid::render(Context& ctx) -> void {
 	const auto view_size = ctx.win.getView().getSize();
 	const auto view_center = ctx.win.getView().getCenter();
 	this->backdrop.setSize(view_size);

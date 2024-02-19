@@ -6,7 +6,7 @@
 #include "nodes/node.hpp"
 #include "nodes/robot/test/test.hpp"
 
-std::vector<core::nodes::ApplicationNode> core::nodes::create_all_nodes() {
+auto core::nodes::create_all_nodes() -> std::vector<core::nodes::ApplicationNode> {
 	std::vector<ApplicationNode> nodes;
 
 	// Add all nodes

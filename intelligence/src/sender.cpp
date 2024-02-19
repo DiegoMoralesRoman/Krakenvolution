@@ -6,7 +6,7 @@
 
 INITIALIZE_EASYLOGGINGPP
 
-int main(int argc, char** argv) {
+auto main(int argc, char** argv) -> int {
 	START_EASYLOGGINGPP(argc, argv);
 	auto logger_conf = run::log::get_config();
 	el::Loggers::reconfigureLogger("default", logger_conf);

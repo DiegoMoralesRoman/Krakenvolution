@@ -40,7 +40,7 @@ namespace core::topics {
 	};
 // Define custom nodes
 #define INIT_NODE(name, context_class) \
-	void setup(::core::topics::GlobalContext& global, context_class& ctx, const ::core::config::Config& cfg); \
-	void end(::core::topics::GlobalContext& global, context_class& ctx, const ::core::config::Config& cfg); \
-	::core::nodes::ApplicationNode create_node();
+	auto setup(::core::topics::GlobalContext& global, context_class& ctx, const ::core::config::Config& cfg) -> void; \
+	auto end(::core::topics::GlobalContext& global, context_class& ctx, const ::core::config::Config& cfg) -> void; \
+	auto create_node() -> ::core::nodes::ApplicationNode;
 }

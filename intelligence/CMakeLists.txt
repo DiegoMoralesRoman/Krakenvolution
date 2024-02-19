@@ -30,7 +30,7 @@ set(CMAKE_CXX_FLAGS_DEBUG "-O3 -g")
 # For RXCPP reasons I have to disable this warnings
 add_compile_options(-Wno-deprecated-declarations)
 
-set(CMAKE_CXX_INCLUDE_WHAT_YOU_USE include-what-you-use)
+# set(CMAKE_CXX_INCLUDE_WHAT_YOU_USE include-what-you-use)
 # set(CLANG_TIDY_CHECKS "-checks=-*,modernize-*,llvm-include-order")
 # set(CLANG_TIDY_CHECKS "llvm-include-order")
 #

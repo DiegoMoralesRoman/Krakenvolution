@@ -1,7 +1,7 @@
 #include "parser.hpp"
 #include <memory>
 
-std::unique_ptr<run::parser::Options> run::parser::add_options(CLI::App &app) {
+auto run::parser::add_options(CLI::App &app) -> std::unique_ptr<run::parser::Options> {
 	auto options = std::make_unique<Options>();
 
 	app.add_flag("--graphics", options->graphics,

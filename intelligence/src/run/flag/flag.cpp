@@ -48,7 +48,7 @@ const auto max_length = 58;
  * @param width assumed maximum width of the text. The text will be centered around half this width
  * @return padded text
  */
-std::string center_text(const std::string& text, int width) {
+auto center_text(const std::string& text, int width) -> std::string {
     if (text.length() >= width) {
         return text;  // Text is too wide to center in the given width
     }
@@ -59,7 +59,7 @@ std::string center_text(const std::string& text, int width) {
     return std::format("{:>{}}", text, padding_left + text.length());
 }
 
-int get_terminal_width() {
+auto get_terminal_width() -> int {
     struct winsize w;
     if (ioctl(STDOUT_FILENO, TIOCGWINSZ, &w) == -1) {
 		return 80; // default value
@@ -67,7 +67,7 @@ int get_terminal_width() {
     return w.ws_col;  // Number of columns (width)
 }
 
-std::string run::flag::flag() {
+auto run::flag::flag() -> std::string {
 	std::string f { std::string{"\x1B[1m\x1B[34m"} + FLAG };
 	f.append("\x1B[0m");
 

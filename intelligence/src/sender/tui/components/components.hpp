@@ -3,5 +3,5 @@
 #include <ftxui/component/component.hpp>
 
 namespace sender::tui::components {
-	ftxui::Component app();
+	auto app() -> ftxui::Component;
 }

@@ -48,7 +48,7 @@ namespace core::nodes {
 	};
 
 	template<typename Context, typename... Args>
-	std::unique_ptr<Node> create_node(Args... args) {
+	auto create_node(Args... args) -> std::unique_ptr<Node> {
 		static_assert(
 				sizeof...(args) >= 1 || sizeof...(args) <= 2,
 				"This function should take between 1 and 3 arguments"

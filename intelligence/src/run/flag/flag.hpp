@@ -10,5 +10,5 @@ namespace run::flag {
 	/**
 	 * @brief Banner for the initial display
 	 */
-	std::string flag();
+	auto flag() -> std::string;
 }

@@ -9,7 +9,7 @@ namespace core::serial {
 		rxcpp::subscriber<std::string> tx;
 		uint64_t UID;
 
-		bool operator==(const Channel& other) const;
+		auto operator==(const Channel& other) const -> bool;
 	};
 
 	struct ManagedChannel {

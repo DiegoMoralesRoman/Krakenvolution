@@ -7,14 +7,14 @@
 
 #include "sources/tcp/tcp.hpp"
 
-core::nodes::ApplicationNode core::extensions::remote::create_node() {
+auto core::extensions::remote::create_node() -> core::nodes::ApplicationNode {
 	return nodes::ApplicationNode {
 		.node = nodes::create_node<Context>(setup, end),
 		.name = "remote"
 	};
 }
 
-void core::extensions::remote::setup(::core::topics::GlobalContext &global, Context &ctx, const ::core::config::Config &cfg) {
+auto core::extensions::remote::setup(::core::topics::GlobalContext &global, Context &ctx, const ::core::config::Config &cfg) -> void {
 	LOG(INFO) << " Initializing remote channels";
 
 	ctx.source_shared_ctx.conn_manager.on_new_channel([&global, &ctx](const core::serial::Channel& channel) {
@@ -72,6 +72,6 @@ void core::extensions::remote::setup(::core::topics::GlobalContext &global, Cont
 	}
 }
 
-void core::extensions::remote::end(::core::topics::GlobalContext &global, Context &ctx, const ::core::config::Config &cfg) {
+auto core::extensions::remote::end(::core::topics::GlobalContext &global, Context &ctx, const ::core::config::Config &cfg) -> void {
 	if (ctx.tcp_server_thread.has_value()) ctx.tcp_server_thread->join();
 }

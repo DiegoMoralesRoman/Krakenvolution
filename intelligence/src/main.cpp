@@ -18,7 +18,7 @@ void sigint_handler(int signum) {
 	sigint_func(signum);
 }
 
-int main(int argc, char* argv[]) {
+auto main(int argc, char* argv[]) -> int {
 	run::config_easylogging(argc, argv);
 
 	// Main thread control variable

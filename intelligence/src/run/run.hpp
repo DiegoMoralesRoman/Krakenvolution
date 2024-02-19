@@ -11,19 +11,19 @@
 
 namespace run {
 	// Parsing
-	void config_easylogging(int argc, char* argv[]);
-	std::unique_ptr<parser::Options> parse_cli(int argc, char* argv[]);
+	auto config_easylogging(int argc, char* argv[]) -> void;
+	auto  parse_cli(int argc, char* argv[]) -> std::unique_ptr<parser::Options>;
 
 	// Nodes
-	void init_nodes(std::vector<core::nodes::ApplicationNode>& nodes, core::topics::GlobalContext& global, core::config::Config& cfg);
-	void teardown_nodes(std::vector<core::nodes::ApplicationNode>& nodes, core::topics::GlobalContext& global, core::config::Config& cfg);
+	auto init_nodes(std::vector<core::nodes::ApplicationNode>& nodes, core::topics::GlobalContext& global, core::config::Config& cfg) -> void;
+	auto teardown_nodes(std::vector<core::nodes::ApplicationNode>& nodes, core::topics::GlobalContext& global, core::config::Config& cfg) -> void;
 
 	// Graphics
-	std::optional<std::thread> init_graphics_thread(std::atomic<bool>& running, core::topics::GlobalContext& global);
+	auto init_graphics_thread(std::atomic<bool>& running, core::topics::GlobalContext& global) -> std::optional<std::thread>;
 
 	// Cleanup
-	void shutdown_application();
+	auto shutdown_application() -> void;
 
 	// Options
-	core::config::Config config_from_path(const std::string& path);
+	auto config_from_path(const std::string& path) -> core::config::Config;
 }

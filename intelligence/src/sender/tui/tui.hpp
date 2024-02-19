@@ -1,5 +1,5 @@
 #pragma once
 
 namespace sender::tui {
-	void run();
+	auto run() -> void;
 }

@@ -3,7 +3,7 @@
 #include <rxcpp/rx.hpp>
 #include <thread>
 
-int main() {
+auto main() -> int {
 	rxcpp::subjects::subject<int> nums;
 	auto other = nums;
 	nums.get_observable().subscribe([](const int msg) { std::cout << "[NUMS] " << msg << std::endl; });

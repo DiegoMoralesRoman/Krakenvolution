@@ -2,3 +2,4 @@ Session.vim
 build
 .envrc
 flake.lock
+.env.sh

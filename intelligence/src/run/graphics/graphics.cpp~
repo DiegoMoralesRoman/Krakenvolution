@@ -27,12 +27,12 @@ auto main_graphics_loop(
 		const std::function<void(run::graphics::Event)>
 	) -> void;
 
-auto run::graphics::init_graphics(const std::atomic<bool>& running, core::nodes::GlobalContext& global, const std::function<void(Event)>& on_event) -> std::thread {
+std::thread run::graphics::init_graphics(const std::atomic<bool>& running, core::nodes::GlobalContext& global, const std::function<void(Event)>& on_event) {
     auto handler = std::thread(main_graphics_loop, std::cref(running), std::ref(global), on_event);
     return handler;
 }
 
-auto init(run::graphics::Context& ctx) -> void {
+void init(run::graphics::Context& ctx) {
 	ctx.win.setFramerateLimit(60);
 
 	const float proportions = (static_cast<float>(ctx.win.getSize().x) / static_cast<float>(ctx.win.getSize().y));
@@ -44,15 +44,15 @@ auto init(run::graphics::Context& ctx) -> void {
 	ctx.view.setCenter(0.0, 0.0);
 };
 
-auto get_pressed_keys() -> std::vector<sf::Keyboard::Key>;
-auto send_mouse_button_events(const rxcpp::subscriber<sf::Mouse::Button>& mouse_btn_input_sub) -> void;
-auto handle_mouse_wheel_event(const sf::Event& event, const rxcpp::subscriber<std::tuple<sf::Mouse::Wheel, double>>& mouse_wheel_input_sub) -> void;
+std::vector<sf::Keyboard::Key> get_pressed_keys();
+void send_mouse_button_events(const rxcpp::subscriber<sf::Mouse::Button>& mouse_btn_input_sub);
+void handle_mouse_wheel_event(const sf::Event& event, const rxcpp::subscriber<std::tuple<sf::Mouse::Wheel, double>>& mouse_wheel_input_sub);
 
-auto main_graphics_loop(
+void main_graphics_loop(
 		const std::atomic<bool>& running,
 		core::nodes::GlobalContext& global,
 		const std::function<void(run::graphics::Event)> on_event
-)  -> void {
+) {
 	// Channels
 	rxcpp::subjects::subject<sf::Keyboard::Key> key_input;
 	const auto& key_input_sub = key_input.get_subscriber();
@@ -109,7 +109,7 @@ auto main_graphics_loop(
 	LOG(INFO) << "Exiting main graphics execution loop";
 }
 
-auto get_pressed_keys() -> std::vector<sf::Keyboard::Key> {
+std::vector<sf::Keyboard::Key> get_pressed_keys() {
     std::vector<sf::Keyboard::Key> pressedKeys;
 
     for (int key = sf::Keyboard::A; key != sf::Keyboard::KeyCount; ++key) {
@@ -121,7 +121,7 @@ auto get_pressed_keys() -> std::vector<sf::Keyboard::Key> {
     return pressedKeys;
 }
 
-auto send_mouse_button_events(const rxcpp::subscriber<sf::Mouse::Button>& mouse_btn_input_sub) -> void {
+void send_mouse_button_events(const rxcpp::subscriber<sf::Mouse::Button>& mouse_btn_input_sub) {
     for (int button = sf::Mouse::Left; button != sf::Mouse::ButtonCount; ++button) {
         if (sf::Mouse::isButtonPressed(static_cast<sf::Mouse::Button>(button))) {
             mouse_btn_input_sub.on_next(static_cast<sf::Mouse::Button>(button));
@@ -129,7 +129,7 @@ auto send_mouse_button_events(const rxcpp::subscriber<sf::Mouse::Button>& mouse_
     }
 }
 
-auto handle_mouse_wheel_event(const sf::Event& event, const rxcpp::subscriber<std::tuple<sf::Mouse::Wheel, double>>& mouse_wheel_input_sub) -> void {
+void handle_mouse_wheel_event(const sf::Event& event, const rxcpp::subscriber<std::tuple<sf::Mouse::Wheel, double>>& mouse_wheel_input_sub) {
     if (event.type == sf::Event::MouseWheelScrolled) {
         if (event.mouseWheelScroll.wheel == sf::Mouse::VerticalWheel) {
             mouse_wheel_input_sub.on_next(std::make_tuple(sf::Mouse::VerticalWheel, event.mouseWheelScroll.delta));

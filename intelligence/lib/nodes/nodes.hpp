@@ -6,5 +6,5 @@
 
 namespace core::nodes {
 	using NodePtr = std::unique_ptr<core::nodes::Node>;
-	std::vector<core::nodes::ApplicationNode> create_all_nodes(); 
+	auto create_all_nodes() -> std::vector<core::nodes::ApplicationNode>; 
 }

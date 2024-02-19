@@ -6,7 +6,7 @@
 #include <format>
 #include <variant>
 
-std::string repr_load_err(const core::config::LoadErr& err) {
+auto repr_load_err(const core::config::LoadErr& err) -> std::string {
 	struct {
 		std::string operator()(const core::config::FileNotFoundErr& err) {
 			return std::format("Configuration file not found: {}", err.file);
@@ -23,7 +23,7 @@ std::string repr_load_err(const core::config::LoadErr& err) {
 	return std::visit(visitor, err);
 }
 
-core::config::Config run::config_from_path(const std::string &path) {
+auto run::config_from_path(const std::string &path) -> core::config::Config {
 	LOG(INFO) << "󰔟  Loading configuration from " << path;
 	const auto config = core::config::load_config(path);
 	if (config.has_value()) {

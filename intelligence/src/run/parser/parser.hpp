@@ -10,5 +10,5 @@ namespace run::parser {
 		std::optional<std::string> config_path = std::nullopt;
 	};
 
-	std::unique_ptr<Options> add_options(CLI::App& app); 
+	auto add_options(CLI::App& app) -> std::unique_ptr<Options>; 
 }

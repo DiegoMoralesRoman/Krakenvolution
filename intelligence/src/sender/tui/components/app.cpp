@@ -6,7 +6,7 @@
 
 using namespace ftxui;
 
-Component text_input() {
+auto text_input() -> Component {
 	auto data = std::make_shared<std::string>();
 	auto input = Input(data.get(), "Placeholder");
 
@@ -15,7 +15,7 @@ Component text_input() {
 	});
 }
 
-Component sender::tui::components::app() {
+auto sender::tui::components::app() -> Component {
 	return Container::Vertical({
 		text_input(),
 		text_input(),

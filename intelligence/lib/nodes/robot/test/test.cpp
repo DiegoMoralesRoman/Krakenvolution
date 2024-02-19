@@ -5,14 +5,14 @@
 #include <chrono>
 #include <functional>
 
-core::nodes::ApplicationNode core::nodes::test::create_node() {
+auto core::nodes::test::create_node() -> core::nodes::ApplicationNode {
 	return ApplicationNode {
 		.node = core::nodes::create_node<Context>(setup, end),
 		.name = "test"
 	};
 }
 
-void loop(core::nodes::GlobalContext& global, core::nodes::test::Context& ctx) {
+auto loop(core::nodes::GlobalContext& global, core::nodes::test::Context& ctx) -> void {
 	auto obs = rxcpp::observable<>::interval(std::chrono::seconds(1))
 		.take_until(global.stop_signal)
 		.subscribe([&global](auto iter) {
@@ -24,7 +24,7 @@ void loop(core::nodes::GlobalContext& global, core::nodes::test::Context& ctx) {
 }
 
 // Main node functions
-void core::nodes::test::setup(::core::topics::GlobalContext &global, test::Context &ctx, const ::core::config::Config &cfg) {
+auto core::nodes::test::setup(::core::topics::GlobalContext &global, test::Context &ctx, const ::core::config::Config &cfg) -> void {
 	ctx.loop_thread = std::thread(loop, std::ref(global), std::ref(ctx));
 
 	global.topics.person.get_observable()
@@ -36,6 +36,6 @@ void core::nodes::test::setup(::core::topics::GlobalContext &global, test::Conte
 
 }
 
-void core::nodes::test::end(::core::topics::GlobalContext &global, test::Context &ctx, const ::core::config::Config &cfg) {
+auto core::nodes::test::end(::core::topics::GlobalContext &global, test::Context &ctx, const ::core::config::Config &cfg) -> void {
 	ctx.loop_thread.join();
 }

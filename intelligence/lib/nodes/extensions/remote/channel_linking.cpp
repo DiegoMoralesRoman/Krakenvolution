@@ -2,7 +2,7 @@
 
 using namespace core::extensions;
 
-std::optional<rxcpp::composite_subscription> remote::create_subscription(const Subscribe &subscription, const std::unordered_map<std::string, serial::ObserverMapping> &mappings, const core::serial::Channel &source_channel) {
+auto remote::create_subscription(const Subscribe &subscription, const std::unordered_map<std::string, serial::ObserverMapping> &mappings, const core::serial::Channel &source_channel) -> std::optional<rxcpp::composite_subscription> {
 	auto topic_name = subscription.topic();
 
 	auto topic_iter = mappings.find(topic_name);
@@ -20,7 +20,7 @@ std::optional<rxcpp::composite_subscription> remote::create_subscription(const S
 	return std::nullopt;
 }
 
-bool remote::manage_publish(const Publish &msg, const std::unordered_map<std::string, serial::ObserverMapping>& mappings) {
+auto remote::manage_publish(const Publish &msg, const std::unordered_map<std::string, serial::ObserverMapping>& mappings) -> bool {
 	auto topic_iter = mappings.find(msg.topic());
 
 	if (topic_iter != mappings.end()) {

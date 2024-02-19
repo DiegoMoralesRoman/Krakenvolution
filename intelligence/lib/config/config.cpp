@@ -3,7 +3,7 @@
 
 // This comes from yaml/Yaml.cpp:50
 
-const core::config::LoadResult core::config::load_config(const std::string& path) noexcept {
+auto core::config::load_config(const std::string& path) noexcept -> const core::config::LoadResult {
 	try {
 
 		auto node = YAML::LoadFile(path);

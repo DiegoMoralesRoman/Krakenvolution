@@ -18,33 +18,21 @@
             cmake
             sfml
             gtest
-			protobuf
 			yaml-cpp
+			platformio
+			protobuf
           ];
 
 		 shellHook = ''
+			alias run="make -j4 && ./src/krakenvolution"
+			alias sender="make -j4 && ./src/msgsender"
             export SHELL=${pkgs.zsh}/bin/zsh
+			export CPATH=$(lib.makeSearchPathOutput "dev" "include" buildInputs)
+
+			export LC_CTYPE=C.utf8
+			export LC_ALL=C.utf8
           '';         # Set any environment variables or shell hooks you need for development
         };
 
-		# TODO: make proper build step
-        packages = {
-          my-app = pkgs.stdenv.mkDerivation {
-            name = "my-app";
-            src = self;
-            buildInputs = with pkgs; [ gcc cmake sfml gtest ];
-            # Replace this with your actual build commands
-            buildPhase = ''
-              cmake .
-              make
-            '';
-            installPhase = ''
-              mkdir -p $out/bin
-              cp my-app $out/bin/
-            '';
-          };
-        };
-
-        defaultPackage = self.packages.my-app;
       });
 }

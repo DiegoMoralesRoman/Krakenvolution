@@ -1,19 +1,18 @@
 #pragma once
 
-#include "config/config.hpp"
-#include "topics/topics.hpp"
+#include <config/config.hpp>
+#include <topics/topics.hpp>
 
 #include <functional>
 #include <memory>
 #include <string>
 
 namespace core::nodes {
-	using GlobalContext = topics::GlobalContext;
 
 	class Node {
 		public:
-	virtual void setup(GlobalContext& global, const config::Config& cfg) = 0;
-	virtual void end(GlobalContext& global, const config::Config& cfg) = 0;
+	virtual void setup(topics::GlobalContext& global, const config::Config& cfg) = 0;
+	virtual void end(topics::GlobalContext& global, const config::Config& cfg) = 0;
 			virtual ~Node() {};
 	};
 
@@ -25,19 +24,19 @@ namespace core::nodes {
 	template<typename Ctx>
 	class NodeTemplate : public Node {
 		public:
-			using SetupFunc = std::function<void(GlobalContext&, Ctx&, const config::Config&)>;
-			using EndFunc = std::function<void(GlobalContext&, Ctx&, const config::Config&)>;
+			using SetupFunc = std::function<void(topics::GlobalContext&, Ctx&, const config::Config&)>;
+			using EndFunc = std::function<void(topics::GlobalContext&, Ctx&, const config::Config&)>;
 
 			NodeTemplate(const SetupFunc&& setup, const EndFunc&& end)
 				: _setup(setup), _end(end) {}
 
 			virtual ~NodeTemplate() = default;
 
-			virtual void setup(GlobalContext& global, const config::Config& cfg) override {
+			virtual void setup(topics::GlobalContext& global, const config::Config& cfg) override {
 				this->_setup(global, this->ctx, cfg);
 			}
 
-			virtual void end(GlobalContext& global, const config::Config& cfg) override {
+			virtual void end(topics::GlobalContext& global, const config::Config& cfg) override {
 				this->_end(global, this->ctx, cfg);
 			}
 
@@ -55,5 +54,4 @@ namespace core::nodes {
 			);
 		return std::make_unique<NodeTemplate<Context>>(args...);
 	};
-
 }

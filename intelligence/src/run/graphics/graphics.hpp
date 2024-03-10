@@ -1,7 +1,7 @@
 #pragma once
 
-#include "topics/topics.hpp"
-#include <atomic>
+#include <topics/topics.hpp>
+
 #include <functional>
 #include <thread>
 
@@ -12,8 +12,13 @@ namespace run::graphics {
 		CLOSE
 	};
 
+	struct WinDimensions {
+		size_t width;
+		size_t height;
+	};
+
 	auto init_graphics(
-			const std::atomic<bool>& running,
+			const WinDimensions& win_size,
 			core::topics::GlobalContext& global,
 			const std::function<void(Event)>&
 		) -> std::thread;

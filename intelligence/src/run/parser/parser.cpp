@@ -1,5 +1,4 @@
 #include "parser.hpp"
-#include <memory>
 
 auto run::parser::add_options(CLI::App &app) -> std::unique_ptr<run::parser::Options> {
 	auto options = std::make_unique<Options>();

@@ -1,28 +1,34 @@
 #pragma once
 
-#include <cstdint>
 #include <rxcpp/rx.hpp>
 
+#include <cstdint>
+#include <string>
+
 namespace core::serial {
+	template<typename Signal = std::string>
 	struct Channel {
-		rxcpp::observable<std::string> rx;
-		rxcpp::subscriber<std::string> tx;
+		rxcpp::observable<Signal> rx;
+		rxcpp::subscriber<Signal> tx;
 		uint64_t UID;
 
-		auto operator==(const Channel& other) const -> bool;
+		auto operator==(const Channel<Signal>& other) const -> bool {
+			return this->UID == other.UID;
+		}
 	};
 
+	template<typename Signal = std::string>
 	struct ManagedChannel {
-		Channel source_channel;
-		Channel core_channel;
+		Channel<Signal> source_channel;
+		Channel<Signal> core_channel;
 		std::string name;
 		// RXCPP
-		rxcpp::subjects::subject<std::string> to_source;
-		rxcpp::subjects::subject<std::string> from_source;
+		rxcpp::subjects::subject<Signal> to_source;
+		rxcpp::subjects::subject<Signal> from_source;
 	};
 
-	struct ObserverMapping {
+	struct ObserverMapping { // Mappings will always be using string (boundary)
 		rxcpp::subjects::subject<std::string> from_source;
-		Channel to_core_channel;
+		Channel<> to_core_channel;
 	};
 }

@@ -6,11 +6,17 @@ std::unique_ptr<sender::parser::Options> sender::parser::add_options(CLI::App &a
 
 	app.footer("MsgSender by Laura Morales Román");
 
-	app.require_subcommand();
-	auto sub = app.add_subcommand("chat", "Acts as a chat with the topic");
+	// app.require_subcommand();
+	app.add_option("addr", options->ip,
+			"Address of the server")
+		->required();
 
-	// sub->add_option("--topic", options->topic,
-	// 			 "Specifies the topic that the messages will be sent and received from");
+	app.add_option("port", options->port,
+			"Port of the server")
+		->required();
+
+	app.add_option("--topic", options->topic,
+			"Topic to send the message to");
 	
 	return options;
 }

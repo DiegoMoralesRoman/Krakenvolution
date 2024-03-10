@@ -1,7 +1,8 @@
-#include "config/config.hpp"
 #include "run.hpp"
 
-#include "easylogging/easylogging++.h"
+#include "config/config.hpp"
+
+#include <easylogging/easylogging++.h>
 #include <cstdlib>
 
 auto run::init_nodes(std::vector<core::nodes::ApplicationNode>& nodes, core::topics::GlobalContext& global, core::config::Config& cfg) -> void{

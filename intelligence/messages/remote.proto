@@ -4,7 +4,19 @@ message Subscribe {
 	string topic = 1;
 }
 
+message Unsubscribe {
+	string topic = 1;
+}
+
 message Publish {
 	string topic = 1;
 	bytes msg = 2;
+}
+
+message RemoteMsg {
+	oneof msg {
+		Subscribe sub = 1;
+		Unsubscribe unsub = 2;
+		Publish pub = 3;
+	}
 }

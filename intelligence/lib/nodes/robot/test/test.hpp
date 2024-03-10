@@ -1,9 +1,5 @@
 #pragma once
 
-#include "topics/topics.hpp"
-#include "context.hpp"
-#include "nodes/nodes.hpp"
+#include <nodes/node_definitions.hpp>
 
-namespace core::nodes::test {
-	INIT_NODE(test, test::Context)
-}
+CREATE_NODE(test)

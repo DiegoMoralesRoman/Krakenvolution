@@ -1,4 +1,5 @@
 #include "flag.hpp"
+
 #include <algorithm>
 #include <format>
 #include <unistd.h>

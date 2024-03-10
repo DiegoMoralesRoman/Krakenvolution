@@ -1,9 +1,8 @@
 #pragma once
 
-#include "config/err.hpp"
+#include <config/err.hpp>
 
-#include "yaml-cpp/yaml.h"
-
+#include <yaml-cpp/yaml.h>
 #include <string>
 #include <expected>
 

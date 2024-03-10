@@ -7,6 +7,8 @@
 namespace sender::parser {
 	struct Options {
 		std::string topic;
+		std::string ip;
+		uint16_t port;
 	};
 
 	std::unique_ptr<Options> add_options(CLI::App& app); 

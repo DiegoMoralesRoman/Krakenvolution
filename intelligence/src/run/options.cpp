@@ -1,7 +1,9 @@
-#include "config/config.hpp"
 #include "run.hpp"
 
-#include "easylogging/easylogging++.h"
+#include "config/config.hpp"
+
+#include <easylogging/easylogging++.h>
+
 #include <cstdlib>
 #include <format>
 #include <variant>

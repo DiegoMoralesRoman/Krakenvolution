@@ -4,12 +4,14 @@
 #include <rxcpp/rx.hpp>
 #include <unordered_map>
 
+#include <serial/channel.hpp>
+
 // Messages
 #include "rxcpp/rx-observable.hpp"
 #include "rxcpp/subjects/rx-subject.hpp"
+//
 // Protobuf messages
 #include "messages/test.pb.h"
-#include "serial/channel.hpp"
 
 namespace core::topics {
 	/*=============
@@ -24,12 +26,12 @@ namespace core::topics {
 
 	struct GlobalContext {
 		Topics topics;
-		const std::atomic<bool>& running;
+		std::atomic<bool>& running;
 		rxcpp::subjects::subject<bool> stop_subject;
 		rxcpp::observable<bool> stop_signal;
 
-		GlobalContext(const std::atomic<bool>* running) 
-			: running(*running), stop_signal(stop_subject.get_observable()) {
+		GlobalContext(std::atomic<bool>& running) 
+			: running(running), stop_signal(stop_subject.get_observable()) {
 			// Start a separate thread for the running.wait logic
 			std::thread([this]() {
 				this->running.wait(true);
@@ -38,9 +40,4 @@ namespace core::topics {
 			}).detach(); // Detach the thread to run independently
 		}
 	};
-// Define custom nodes
-#define INIT_NODE(name, context_class) \
-	auto setup(::core::topics::GlobalContext& global, context_class& ctx, const ::core::config::Config& cfg) -> void; \
-	auto end(::core::topics::GlobalContext& global, context_class& ctx, const ::core::config::Config& cfg) -> void; \
-	auto create_node() -> ::core::nodes::ApplicationNode;
 }

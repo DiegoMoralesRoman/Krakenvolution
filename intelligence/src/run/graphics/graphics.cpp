@@ -1,34 +1,26 @@
 #include <SFML/Graphics/Rect.hpp>
-#include <SFML/Graphics/View.hpp>
-#include <atomic>
-#include <functional>
-#include <thread>
-
-#include "easylogging/easylogging++.h"
-
-#include "context.hpp"
-#include "nodes/node.hpp"
-#include "rxcpp/subjects/rx-subject.hpp"
-#include "graphics.hpp"
-
-#include "components/enviroment.hpp"
-
 #include <SFML/Graphics.hpp>
 #include <SFML/Graphics/CircleShape.hpp>
 #include <SFML/Graphics/RenderWindow.hpp>
+
+#include "context.hpp"
+#include "graphics.hpp"
+#include "components/enviroment.hpp"
+
+#include <easylogging/easylogging++.h>
+
+#include <functional>
+#include <thread>
 #include <tuple>
 
-constexpr size_t WIDTH = 800;
-constexpr size_t HEIGHT = 600;
-
 auto main_graphics_loop(
-		const std::atomic<bool>& running, 
-		core::nodes::GlobalContext& global, 
-		const std::function<void(run::graphics::Event)>
+		core::topics::GlobalContext& global, 
+		const std::function<void(run::graphics::Event)>,
+		const run::graphics::WinDimensions win_size
 	) -> void;
 
-auto run::graphics::init_graphics(const std::atomic<bool>& running, core::nodes::GlobalContext& global, const std::function<void(Event)>& on_event) -> std::thread {
-    auto handler = std::thread(main_graphics_loop, std::cref(running), std::ref(global), on_event);
+auto run::graphics::init_graphics(const WinDimensions& win_size, core::topics::GlobalContext& global, const std::function<void(Event)>& on_event) -> std::thread {
+    auto handler = std::thread(main_graphics_loop, std::ref(global), on_event, win_size);
     return handler;
 }
 
@@ -49,9 +41,9 @@ auto send_mouse_button_events(const rxcpp::subscriber<sf::Mouse::Button>& mouse_
 auto handle_mouse_wheel_event(const sf::Event& event, const rxcpp::subscriber<std::tuple<sf::Mouse::Wheel, double>>& mouse_wheel_input_sub) -> void;
 
 auto main_graphics_loop(
-		const std::atomic<bool>& running,
-		core::nodes::GlobalContext& global,
-		const std::function<void(run::graphics::Event)> on_event
+		core::topics::GlobalContext& global,
+		const std::function<void(run::graphics::Event)> on_event,
+		run::graphics::WinDimensions win_size
 )  -> void {
 	// Channels
 	rxcpp::subjects::subject<sf::Keyboard::Key> key_input;
@@ -63,7 +55,7 @@ auto main_graphics_loop(
 
 	// Create main context
 	run::graphics::Context ctx {
-		.win = sf::RenderWindow(sf::VideoMode(WIDTH, HEIGHT), "Krakenvolution"),
+		.win = sf::RenderWindow(sf::VideoMode(win_size.width, win_size.height), "Krakenvolution"),
 		.key_input = key_input.get_observable(),
 		.mouse_btn_input = mouse_btn_input.get_observable(),
 		.mouse_wheel_input = mouse_wheel_input.get_observable(),
@@ -77,7 +69,7 @@ auto main_graphics_loop(
 	run::graphics::components::Enviroment env(ctx);
 
 	ctx.win.setView(ctx.view);
-	while (running) {
+	while (global.running) {
 		// ===========
 		// Read events
 		// ===========

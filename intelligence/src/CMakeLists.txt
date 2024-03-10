@@ -44,6 +44,7 @@ target_link_libraries(${PROJECT_NAME}
 add_executable(tests tests.cpp)
 target_link_libraries(tests
 	${MAIN_LIBS}
+	ftxui
 )
 
 add_subdirectory(sender)

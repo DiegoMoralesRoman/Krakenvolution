@@ -35,6 +35,7 @@ target_link_libraries(messages PUBLIC
 	absl::strings 
 	absl::base
 	absl::log_internal_check_op
+	absl::status
 )
 
 target_include_directories(messages PUBLIC ${PROTO_OUTPUT_DIR})

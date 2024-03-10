@@ -1,21 +1,28 @@
 #include <gtest/gtest.h>
 
-#include "nodes/node.hpp"
-#include "nodes/nodes.hpp"
+#include <nodes/node_definitions.hpp>
+
 #include "config/config.hpp"
 #include "topics/topics.hpp"
 
-struct Context {
-	int value;
-};
+#include <easylogging/easylogging++.h>
 
-INIT_NODE(test_node, Context);
+INITIALIZE_EASYLOGGINGPP
 
-void setup(core::topics::GlobalContext& global, Context& ctx, const core::config::Config& cfg) {
+
+namespace core::nodes::test_node {
+	struct Context {
+		int value;
+	};
+
+	INIT_NODE(test_node, Context, nodes);
+}
+
+void core::nodes::test_node::setup(core::topics::GlobalContext& global, core::nodes::test_node::Context& ctx, const core::config::Config& cfg) {
 
 }
 
-void end(core::topics::GlobalContext& global, Context& ctx, const core::config::Config& cfg) {
+void core::nodes::test_node::end(core::topics::GlobalContext& global, core::nodes::test_node::Context& ctx, const core::config::Config& cfg) {
 
 }
 

@@ -1,9 +1,5 @@
 #pragma once
 
-#include "nodes/extensions/remote/context.hpp"
-#include "nodes/nodes.hpp"
-#include "topics/topics.hpp"
+#include <nodes/node_definitions.hpp>
 
-namespace core::extensions::remote {
-	INIT_NODE(remote, Context);
-}
+CREATE_EXTENSION(remote)

@@ -1,20 +1,13 @@
 #include "nodes.hpp"
 
-// Nodes
-#include "nodes/robot/lidar/lidar.hpp"
-#include "nodes/extensions/remote/remote.hpp"
-#include "nodes/node.hpp"
-#include "nodes/robot/test/test.hpp"
+#include <vector>
 
-auto core::nodes::create_all_nodes() -> std::vector<core::nodes::ApplicationNode> {
+auto core::nodes::create_all_nodes() -> std::vector<ApplicationNode> {
 	std::vector<ApplicationNode> nodes;
+	return nodes;
+}
 
-	// Add all nodes
-	nodes.push_back(nodes::lidar::create_node());
-	nodes.push_back(nodes::test::create_node());
-
-	// Add all extensions
-	nodes.push_back(extensions::remote::create_node());
-
+auto core::nodes::static_pool() -> std::vector<ApplicationNode>& {
+	static std::vector<ApplicationNode> nodes;
 	return nodes;
 }

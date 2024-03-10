@@ -1,13 +1,9 @@
 #pragma once
 
-#include <atomic>
-#include <memory>
-#include "nodes/node.hpp"
 #include "parser/parser.hpp"
-#include <optional>
-#include <thread>
-#include <vector>
-#include "topics/topics.hpp"
+#include <nodes/node.hpp>
+
+#include <memory>
 
 namespace run {
 	// Parsing
@@ -19,7 +15,7 @@ namespace run {
 	auto teardown_nodes(std::vector<core::nodes::ApplicationNode>& nodes, core::topics::GlobalContext& global, core::config::Config& cfg) -> void;
 
 	// Graphics
-	auto init_graphics_thread(std::atomic<bool>& running, core::topics::GlobalContext& global) -> std::optional<std::thread>;
+	auto init_graphics_thread(core::topics::GlobalContext& global) -> std::optional<std::thread>;
 
 	// Cleanup
 	auto shutdown_application() -> void;

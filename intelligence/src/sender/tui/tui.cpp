@@ -1,19 +1,25 @@
 #include "tui.hpp"
 
-#include "ftxui/component/component_base.hpp"  // for ComponentBase
-#include "ftxui/component/screen_interactive.hpp"  // for Component, ScreenInteractive
+#include "components/app.hpp"
 
-#include <easylogging/easylogging++.h>
+#include <ftxui/component/screen_interactive.hpp>  // for Component, ScreenInteractive
+#include <messages/remote.pb.h>
 
-#include "components/components.hpp"
+#include <memory>
+#include <utility>
 
-using namespace sender;
+auto sender::tui::run(const parser::Options& options) -> std::tuple<StartFn, ExitFn> {
+	auto screen = std::shared_ptr<ftxui::ScreenInteractive>(
+		new ftxui::ScreenInteractive(ftxui::ScreenInteractive::Fullscreen())
+	);
 
-auto tui::run() -> void {
-	using namespace ftxui;
-
-	auto app = sender::tui::components::app();
-
-	auto screen = ScreenInteractive::TerminalOutput();
-	screen.Loop(app);
+	return {
+		[=, &options] { 
+			auto refresh = [=] {
+				screen->PostEvent(ftxui::Event::Custom);
+			};
+			screen->Loop(sender::tui::components::app(options, refresh)); 
+		},
+		[screen] { screen->Exit(); }
+	};
 }

@@ -4,7 +4,7 @@
 #include <thread>
 #include <variant>
 
-namespace sender::net {
+namespace core::net {
 	struct SocketCreateError {
 		std::string reason;
 	};

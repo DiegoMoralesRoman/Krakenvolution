@@ -4,10 +4,10 @@
 #include <easylogging/easylogging++.h>
 #include "run/logger.hpp"
 
-#include "sender/networking/err.hpp"
+#include <networking/err.hpp>
 #include "sender/parser/parser.hpp"
 #include "sender/tui/tui.hpp"
-#include "sender/networking/connection.hpp"
+#include <networking/connection.hpp>
 
 #include <format>
 #include <functional>

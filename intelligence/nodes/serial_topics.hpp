@@ -1,17 +1,18 @@
 #pragma once
-#include "channel.hpp"
+#include <serial/channel.hpp>
 
 #include <easylogging/easylogging++.h>
 #include <rxcpp/subjects/rx-subject.hpp>
 #include <google/protobuf/descriptor.h>
 
 #include <topics/topics.hpp>
+#include "topics.hpp"
 
 #include <string>
 #include <concepts>
 #include <utility>
 
-namespace core::serial{
+namespace user::serial{
 	template<typename T>
 	concept ProtoMessage = requires (T t) {
 		{ t.SerializeAsString() } -> std::same_as<std::string>;
@@ -22,11 +23,11 @@ namespace core::serial{
 
 
 	template <ProtoMessage Message> 
-	auto gen_mapping(rxcpp::subjects::subject<Message> subject) -> ObserverMapping {
+	auto gen_mapping(rxcpp::subjects::subject<Message> subject) -> core::serial::ObserverMapping {
 		auto from_source = rxcpp::subjects::subject<std::string>();
-		ObserverMapping mapping {
+		core::serial::ObserverMapping mapping {
 			.from_source = from_source,
-			.to_core_channel = Channel<> {
+			.to_core_channel = core::serial::Channel<> {
 				.rx = subject.get_observable().map([](const Message& msg) { return msg.SerializeAsString(); }),
 				.tx = from_source.get_subscriber(),
 				.UID = static_cast<size_t>(random()),
@@ -45,5 +46,5 @@ namespace core::serial{
 		return mapping;
 	}
 
-	auto mapping(topics::GlobalContext& ctx) -> std::unordered_map<std::string, ObserverMapping>;
+	auto mapping(core::topics::GlobalContext& ctx) -> std::unordered_map<std::string, core::serial::ObserverMapping>;
 }

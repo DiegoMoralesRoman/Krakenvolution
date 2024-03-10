@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../../networking/connection.hpp"
+#include <networking/connection.hpp>
 #include "../utils/protobuf.hpp"
 #include "ftxui/dom/elements.hpp"
 #include "log_output.hpp"
@@ -38,7 +38,7 @@ namespace sender::tui::components {
 		std::string ip;
 		uint16_t port;
 		ConnectionStatus status;
-		std::optional<decltype(net::connect({}, {},{}))> connection = std::nullopt;
+		std::optional<decltype(core::net::connect({}, {},{}))> connection = std::nullopt;
 		std::optional<std::function<void()>> on_connect;
 		std::optional<std::function<void()>> on_disconnect;
 	};
@@ -71,9 +71,9 @@ namespace sender::tui::components {
 			}
 			ctx->connection.reset();
 		} else {
-			net::Events ev;
+			core::net::Events ev;
 			ev.on_disconnected([=]{ handle_connect(ctx, push_log, refresh); refresh(); });
-			ctx->connection = net::connect(ev, ctx->ip, ctx->port);
+			ctx->connection = core::net::connect(ev, ctx->ip, ctx->port);
 			if (ctx->connection->has_value()) {
 				ctx->connection->value().conn_thread.detach();
 				if (ctx->on_connect.has_value()) { ctx->on_connect.value()(); }
@@ -98,9 +98,9 @@ namespace sender::tui::components {
 				ctx->status.status = ConnectionStatus::CONNECTED;
 				ctx->status.err_msg = std::nullopt;
 			} else {
-				push_log(LogEntry::ERROR, std::format("Failed to connect to {}:{} ({})", ctx->ip, ctx->port, net::err_repr(connection.error())));
+				push_log(LogEntry::ERROR, std::format("Failed to connect to {}:{} ({})", ctx->ip, ctx->port, core::net::err_repr(connection.error())));
 				ctx->status.status = ConnectionStatus::DISCONNECTED;
-				ctx->status.err_msg = net::err_repr(connection.error());
+				ctx->status.err_msg = core::net::err_repr(connection.error());
 			}
 		} else {
 			push_log(LogEntry::INFO, std::format("Disconnected from {}:{}", ctx->ip, ctx->port));

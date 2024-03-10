@@ -2,7 +2,7 @@
 #include "run.hpp"
 #include "application.hpp"
 
-#include <serial/topics.hpp>
+#include <serial_topics.hpp>
 #include <nodes/nodes.hpp>
 
 #include <easylogging/easylogging++.h>
@@ -42,7 +42,7 @@ void run::run(int argc, char **argv) {
 
 	LOG(INFO) << "🐈 Welcome to \x1b[1\x1b[32mKRAKENVOLUTION\x1b[0m!";
 
-	global_context.topics.serialized.merge(core::serial::mapping(global_context));
+	global_context.topics.serialized.merge(user::serial::mapping(global_context));
 	LOG(INFO) << "󰑓 Loaded serde topics: ";
 	for (const auto& [key, value] : global_context.topics.serialized) {
 		LOG(INFO) << "󰛳 " << key;

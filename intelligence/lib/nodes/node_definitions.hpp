@@ -4,10 +4,6 @@
 #include <nodes/node.hpp>
 #include <nodes/nodes.hpp>
 
-// Contexts
-#include <nodes/robot/test/context.hpp>
-#include <nodes/extensions/remote/context.hpp>
-
 #define INIT_NODE(node_name, context_class, func_namespace) \
 	auto setup(::core::topics::GlobalContext& global, context_class& ctx, const ::core::config::Config& cfg) -> void; \
 	auto end(::core::topics::GlobalContext& global, context_class& ctx, const ::core::config::Config& cfg) -> void; \

@@ -1,1 +1,1 @@
-target_link_libraries(${MOD_NAME} serial messages easylogging)
+target_link_libraries(${MOD_NAME} user_nodes messages easylogging)

@@ -12,12 +12,12 @@
 #include <sys/socket.h>
 #include <thread>
 
-auto sender::net::Events::on_disconnected(const OnDisconnectCb& cb) -> sender::net::Events& {
+auto core::net::Events::on_disconnected(const OnDisconnectCb& cb) -> core::net::Events& {
 	this->_on_disconnected.push_back(cb);
 	return *this;
 }
 
-auto sender::net::Events::notify_on_disconnected() const -> void {
+auto core::net::Events::notify_on_disconnected() const -> void {
 	for (auto& cb : this->_on_disconnected) {
 		cb();
 	}
@@ -26,10 +26,10 @@ auto sender::net::Events::notify_on_disconnected() const -> void {
 auto client_worker(
 		core::serial::Channel<> channel,
 		int sock,
-		sender::net::Events ev
+		core::net::Events ev
 	) -> void;
 
-auto sender::net::connect(
+auto core::net::connect(
 		const Events& ev,
 		std::string ip,
 		uint16_t port
@@ -95,7 +95,7 @@ auto sender::net::connect(
 auto client_worker(
 		core::serial::Channel<> channel,
 		int sock,
-		sender::net::Events ev
+		core::net::Events ev
 	) -> void {
 
 	std::array<char, 4096> buffer;

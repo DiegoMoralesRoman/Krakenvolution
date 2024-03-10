@@ -1,4 +1,4 @@
 #include "topics.hpp"
 
-core::topics::Topics::Topics() {
+user::topics::Topics::Topics() {
 }

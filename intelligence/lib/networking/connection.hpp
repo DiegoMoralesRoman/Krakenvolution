@@ -11,7 +11,7 @@
 #include <atomic>
 #include <expected>
 
-namespace sender::net {
+namespace core::net {
 	class Events {
 		public:
 			using OnDisconnectCb = std::function<void()>;

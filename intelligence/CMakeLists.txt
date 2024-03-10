@@ -55,10 +55,12 @@ include_directories(${PROTO_OUTPUT_DIR})
 
 include_directories(${PROJECT_SOURCE_DIR}/lib)
 include_directories(${PROJECT_SOURCE_DIR}/include)
+include_directories(${PROJECT_SOURCE_DIR}/nodes)
 
 add_subdirectory(include)
 add_subdirectory(src)
 add_subdirectory(lib)
+add_subdirectory(nodes)
 
 
 add_custom_target(run

@@ -1,9 +1,10 @@
 #pragma once
 
 #include "ftxui/component/component.hpp"
-#include "serial/topics.hpp"
 #include "inputs.hpp"
 #include "util/range.hpp"
+
+#include <serial_topics.hpp>
 
 #include <cstdint>
 #include <memory>
@@ -54,7 +55,7 @@ namespace sender::proto {
 				}
     	}
 
-		template<core::serial::ProtoMessage ProtoMsg>
+		template<user::serial::ProtoMessage ProtoMsg>
 		auto get_proto_message() {
 			const auto* desc = ProtoMsg::descriptor();
 			// const auto* desc = Person::descriptor();
@@ -104,7 +105,7 @@ namespace sender::proto {
 
 	}
 
-	template<core::serial::ProtoMessage... ProtoMsg>
+	template<user::serial::ProtoMessage... ProtoMsg>
 	auto get_proto_messages() -> std::vector<Message> {
 		return {
 			__impl::get_proto_message<ProtoMsg>()...

@@ -3,7 +3,8 @@
 #include "run/application.hpp"
 #include "run/run.hpp"
 
-#include "nodes_and_extensions.hpp"
+#include "extensions.hpp"
+#include <nodes.hpp>
 
 INITIALIZE_EASYLOGGINGPP
 

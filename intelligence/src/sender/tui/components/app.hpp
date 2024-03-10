@@ -81,7 +81,7 @@ namespace sender::tui::components {
 
 		Component dynamic_menu = Container::Vertical({
 			Renderer([]{
-				return paragraphAlignCenter("No component selected");
+				return paragraphAlignCenter("No message type selected");
 			}) | borderDashed
 		});
 

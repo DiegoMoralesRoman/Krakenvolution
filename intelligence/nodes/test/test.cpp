@@ -1,12 +1,11 @@
-#include <nodes/node_definitions.hpp>
+#include "test.hpp"
+
 #include <cstdio>
 
 #include "easylogging/easylogging++.h"
 #include "rxcpp/operators/rx-observe_on.hpp"
 #include <chrono>
 #include <functional>
-
-CREATE_NODE(test)
 
 auto loop(core::topics::GlobalContext& global, core::nodes::test::Context& ctx) -> void {
 	// auto obs = rxcpp::observable<>::interval(std::chrono::seconds(1))

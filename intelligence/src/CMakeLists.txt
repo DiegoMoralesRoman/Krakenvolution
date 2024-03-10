@@ -15,6 +15,9 @@ set(MAIN_LIBS
 	cliparser
 	flag
 
+	# Nodes
+	user_nodes
+
 	# messages
 	messages
 
@@ -48,20 +51,22 @@ target_link_libraries(tests
 )
 
 add_subdirectory(sender)
-
-set(SENDER_LIBS
+add_executable(msgsender sender.cpp ${SENDER_FILES})
+target_link_libraries(msgsender
 	# Third party
 	easylogging
 	ftxui
 	
-	# Messages
 	messages
-	sender_cliparser
+	networking
 )
 
-add_executable(msgsender sender.cpp ${SENDER_FILES})
-target_link_libraries(msgsender
-	${SENDER_LIBS}
+add_subdirectory(sequencer)
+add_executable(msgsequencer sequencer.cpp ${SEQUENCER_FILES})
+target_link_libraries(msgsequencer
+	networking
+	easylogging
+	messages
 )
 
 add_dependencies(tests messages)

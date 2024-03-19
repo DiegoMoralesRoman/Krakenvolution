@@ -21,6 +21,7 @@
 			yaml-cpp
 			platformio
 			protobuf
+			nanopb
           ];
 
 		 shellHook = ''

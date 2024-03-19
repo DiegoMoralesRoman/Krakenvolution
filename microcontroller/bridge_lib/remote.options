@@ -1,0 +1,4 @@
+Publish.topic max_size:64
+Publish.msg max_size:256
+Unsubscribe.topic max_size:64
+Subscribe.topic max_size:64

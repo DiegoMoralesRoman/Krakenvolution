@@ -1,0 +1,13 @@
+{
+	"name": "KrakenBridge",
+	"authors": [
+		{
+			"name": "Laura Morales Román",
+			"email": "moralesromanlaura@gmail.com",
+			"url": "https://servertiel.ddns.net"
+		}
+	],
+	"dependencies": [
+			"eric-wieser/nanopb-arduino": "^1.1.0"
+	]
+}

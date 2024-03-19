@@ -1,6 +1,7 @@
 #include "remote.hpp"
 
 #include "channel_linking.hpp"
+#include "nodes/extensions/remote/sources/uart/uart.hpp"
 #include "sources/tcp/tcp.hpp"
 
 #include <algorithm>
@@ -83,10 +84,11 @@ auto core::extensions::remote::setup(topics::GlobalContext &global, Context &ctx
 		ctx.tcp_server_thread = sources::tcp::init_server(global, ctx.tcp_ctx, ctx.source_shared_ctx, cfg["tcp"]);
 	}
 	if (cfg["uart"].IsDefined()) {
-		
+		ctx.uart_server_thread = sources::uart::init_server(global, ctx.uart_ctx, ctx.source_shared_ctx, cfg["uart"]);
 	}
 }
 
 auto core::extensions::remote::end(::core::topics::GlobalContext &global, Context &ctx, const ::core::config::Config &cfg) -> void {
 	if (ctx.tcp_server_thread.has_value()) ctx.tcp_server_thread->join();
+	if (ctx.uart_server_thread.has_value()) ctx.uart_server_thread->join();
 }

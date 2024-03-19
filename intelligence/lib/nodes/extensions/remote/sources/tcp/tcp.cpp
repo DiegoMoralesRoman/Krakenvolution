@@ -85,6 +85,7 @@ auto handle_client(
 	// CORE -> SOURCE Portion of the client
 	auto subscription = channel.rx.subscribe([socket_fd, &channel_name](const std::string& data) {
 		send(socket_fd, data.data(), data.size(), 0);
+		
 	});
 
 	// SOURCE -> CORE Portion of the client

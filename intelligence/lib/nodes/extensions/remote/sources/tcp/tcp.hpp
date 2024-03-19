@@ -2,7 +2,7 @@
 #include <expected>
 #include <thread>
 
-#include "config/config.hpp"
+#include <config/config.hpp>
 #include "nodes/extensions/remote/context.hpp"
 #include "topics/topics.hpp"
 

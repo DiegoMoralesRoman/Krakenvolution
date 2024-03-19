@@ -5,7 +5,7 @@
 #include <fcntl.h>
 
 int core::extensions::remote::uart::open_serial(const char* t_port, int baudrate) {
-	termios tty;
+	termios tty{};
     // Serial port configuration
     // Control modes
     tty.c_cflag &= ~PARENB; // Remove parity
@@ -27,7 +27,7 @@ int core::extensions::remote::uart::open_serial(const char* t_port, int baudrate
     tty.c_oflag &= ~ONLCR; // Prevent CR on newline
 
     // Configure blocking mode with unlimited timeout
-    tty.c_cc[VTIME] = 10; // 1s timeout
+    tty.c_cc[VTIME] = 0; // 1s timeout
     tty.c_cc[VMIN] = 1;
 
     // Configure baudrate 

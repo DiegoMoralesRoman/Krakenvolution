@@ -72,20 +72,21 @@ namespace sender::tui::components {
 			ctx->connection.reset();
 		} else {
 			core::net::Events ev;
-			ev.on_disconnected([=]{ handle_connect(ctx, push_log, refresh); refresh(); });
+			ev.on_disconnected(
+				[=]{ if (ctx->connection.has_value()) handle_connect(ctx, push_log, refresh); refresh(); });
 			ctx->connection = core::net::connect(ev, ctx->ip, ctx->port);
 			if (ctx->connection->has_value()) {
 				ctx->connection->value().conn_thread.detach();
 				if (ctx->on_connect.has_value()) { ctx->on_connect.value()(); }
 				ctx->connection->value().channel.rx.subscribe([=](const std::string& value) {
 					RemoteMsg msg;
-					msg.ParseFromString(value);
-					if (msg.has_pub()) {
+					if (msg.ParseFromString(value) and msg.has_pub()) {
 						const std::string& data = msg.pub().msg();
 						google::protobuf::Any any;
-						any.ParseFromString(data);
-						push_log(LogEntry::IN_MSG, std::format("{} -> {}", msg.pub().topic(), any.DebugString()));
-						refresh();
+						if (any.ParseFromString(data)) {
+							push_log(LogEntry::IN_MSG, std::format("{} -> {}", msg.pub().topic(), any.DebugString()));
+							refresh();
+						}
 					}
 				});
 			}

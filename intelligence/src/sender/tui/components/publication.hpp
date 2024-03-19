@@ -19,9 +19,7 @@
 
 namespace sender::tui::components {
 	struct PublicationContext {
-		decltype(proto::get_proto_messages<>()) messages = proto::get_proto_messages<
-			Person
-		>();
+		decltype(proto::get_proto_messages<>()) messages = user::sender::get_proto_message();
 
 		std::optional<decltype(messages.begin()->component())> current_component = std::nullopt;
 		std::string topic;

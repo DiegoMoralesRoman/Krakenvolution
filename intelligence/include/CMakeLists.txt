@@ -1,10 +1,10 @@
 add_subdirectory(easylogging)
-add_subdirectory(dbscan)
+# add_subdirectory(dbscan)
 add_subdirectory(ftxui)
 
 set(THIRD_PARTY
 	rxcpp
-	dbscan
+	# dbscan
 	easylogging++
 	mini-yaml
 	ftxui
@@ -17,4 +17,4 @@ endforeach()
 message("")
 
 target_compile_options(easylogging PRIVATE -w)
-target_compile_options(dbscan PRIVATE -w)
+# target_compile_options(dbscan PRIVATE -w)

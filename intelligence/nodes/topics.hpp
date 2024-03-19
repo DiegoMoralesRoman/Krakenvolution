@@ -11,6 +11,7 @@ namespace user::topics {
 		Topics();
 		// rxcpp::subjects::subject<messages::Detection> detections;
 		rxcpp::subjects::subject<Person> person;
+		rxcpp::subjects::subject<Led> led;
 		std::unordered_map<std::string, core::serial::ObserverMapping> serialized;
 	};
 }

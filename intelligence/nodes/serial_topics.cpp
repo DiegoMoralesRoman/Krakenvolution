@@ -8,6 +8,7 @@ auto user::serial::mapping(core::topics::GlobalContext &ctx) -> std::unordered_m
 	topics::Topics& topics = ctx.topics;
 
 	MAP_TOPIC(person);
+	MAP_TOPIC(led);
 
 	return map;
 }

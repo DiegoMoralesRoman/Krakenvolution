@@ -67,11 +67,12 @@ namespace sender::tui::components {
 				elements.back() |= focus;
 			}
 
+
 			FlexboxConfig flex_config;
 			flex_config.direction = FlexboxConfig::Direction::ColumnInversed;
 			flex_config.wrap = FlexboxConfig::Wrap::NoWrap;
 
-			return flexbox(elements, flex_config);
+			return yframe(flexbox(elements, flex_config));
 		});
 	}
 }

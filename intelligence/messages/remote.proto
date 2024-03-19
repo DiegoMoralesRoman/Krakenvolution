@@ -13,10 +13,15 @@ message Publish {
 	bytes msg = 2;
 }
 
+message UARTConnected {
+	bool connected = 1;
+}
+
 message RemoteMsg {
 	oneof msg {
 		Subscribe sub = 1;
 		Unsubscribe unsub = 2;
 		Publish pub = 3;
+		UARTConnected uart_conn = 4;
 	}
 }
